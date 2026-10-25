@@ -1,6 +1,6 @@
 # Gambit — gated implementation plan
 
-Global status: Stages 0, 0.5 and 0.6 complete. Feature implementation not started. Every stage below requires its own explicit approval. Do not treat checked planning decisions as permission to code.
+Global status: Stages 0, 0.5, 0.6 and 1 complete. Feature implementation not started. Every stage below requires its own explicit approval. Do not treat checked planning decisions as permission to code.
 
 Testing rule: from Stage 1 on, each stage proposes its test scenarios in its stage plan, writes the approved tests alongside the implementation, and runs npm run test:run, lint and build. Keep tests proportionate to the timebox and avoid duplicating behavior across suites (ARCHITECTURE §10).
 
@@ -112,5 +112,12 @@ Stage 0.6 (test infrastructure, Claude Code; approved by Tali):
 - Files changed: package.json/package-lock.json (dev dependencies, "test": "vitest", "test:run": "vitest run"), vite.config.ts (test block: jsdom, tests/**/*.test.{ts,tsx}, tests/setup.ts), tsconfig.json (reference), new tsconfig.test.json (extends app config, includes tests/), new tests/setup.ts (jest-dom matchers, RTL cleanup), new tests/App.test.tsx (smoke test for the heading). ESLint needed no change: its **/*.{ts,tsx} pattern already lints tests/.
 - Checks (run by Claude): test:run passed (1 file, 1 test); lint passed; build passed and type-checks tests/ through tsc -b; no test code in dist.
 - Limitations: npm reported unapproved install scripts for optional fsevents; left unapproved, not needed for tests.
+
+Stage 1 (typed data and local loader, Claude Code; approved by Tali):
+- Files added: src/types/models.ts (union types, Resource with openIssues, Application, CreateApplicationInput), src/data/resources.ts (11 resources), src/data/getResources.ts (async local loader).
+- Human decisions: Tali required getResources to return independent copies of each resource including its tags array, not just a shallow array copy.
+- Dataset: unique IDs r-001..r-011; AWS 5 / GCP 3 / Azure 3; production 6 / staging 3 / development 2; critical 2 / high 4 / medium 3 / low 2; openIssues 0–5. Shared name words ("payment", "api", "analytics", "customer-portal") make search return several rows; AWS + production + high returns three rows for combined-filter checks.
+- Checks (run by Claude): test:run passed (existing smoke test); lint passed; build passed (type-checks the fixtures). Ad-hoc Node script (not a committed test) confirmed the counts above and that mutating a returned resource's name and tags left the fixtures and later calls unchanged.
+- Limitations: data is not yet used by any screen; no dedicated tests per plan.
 
 For each approved stage append: scope approved, files changed, human decisions/review, checks/results, known limitations, approximate actual effort if measured. Do not invent times or outcomes.
