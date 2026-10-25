@@ -6,6 +6,15 @@ import type {
   CreateApplicationInput,
   Resource,
 } from '../types/models.ts'
+import {
+  formatApplicationId,
+  getNextApplicationNumber,
+} from './applicationIds.ts'
+import {
+  loadApplications,
+  pruneUnknownResources,
+  saveApplications,
+} from './applicationStorage.ts'
 import { buildApplication } from './buildApplication.ts'
 import { WORKSPACE_MESSAGES } from './messages.ts'
 import { RESOURCES_STATUS, WorkspaceContext } from './WorkspaceContext.ts'
@@ -20,7 +29,6 @@ type ResourcesState =
   | { status: typeof RESOURCES_STATUS.error; message: string }
 
 const NO_RESOURCES: Resource[] = []
-const APPLICATION_ID_PREFIX = 'app-'
 
 interface WorkspaceProviderProps {
   children: ReactNode
@@ -30,8 +38,13 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
   const [resourcesState, setResourcesState] = useState<ResourcesState>({
     status: RESOURCES_STATUS.loading,
   })
-  const [applications, setApplications] = useState<Application[]>([])
-  const nextApplicationNumber = useRef(1);
+  const [applications, setApplications] =
+    useState<Application[]>(loadApplications)
+  const nextApplicationNumber = useRef(getNextApplicationNumber(applications));
+
+  useEffect(() => {
+    saveApplications(applications)
+  }, [applications])
 
   useEffect(() => {
     // Ignore completions after unmount (including StrictMode's dev re-run).
@@ -41,6 +54,9 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
       (resources) => {
         if (!ignore) {
           setResourcesState({ status: RESOURCES_STATUS.ready, resources })
+          setApplications((current) =>
+            pruneUnknownResources(current, resources),
+          )
         }
       },
       () => {
@@ -64,7 +80,7 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
         return { ok: false, message: WORKSPACE_MESSAGES.resourcesUnavailable }
       }
 
-      const id = `${APPLICATION_ID_PREFIX}${nextApplicationNumber.current}`
+      const id = formatApplicationId(nextApplicationNumber.current)
       const result = buildApplication(input, resourcesState.resources, id)
 
       if (result.ok) {

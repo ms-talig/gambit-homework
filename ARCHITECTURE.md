@@ -8,9 +8,9 @@ Browse cloud resources, search/filter them, select several, create a named logic
 
 The assignment targets implementation, pragmatic scope, no backend, client-held state, and a fresh-clone run command. README must cover running, built scope, next steps, and AI use. Prioritize core behavior over abstractions or polish. Track effort honestly; report if the chosen scope threatens the timebox.
 
-Agreed: React + TypeScript + Vite, React Router declarative routing, CSS Modules, shared CSS design variables, local async resource loading, one WorkspaceProvider, memory-only state, plain SVG graph, small local reusable UI library.
+Agreed: React + TypeScript + Vite, React Router declarative routing, CSS Modules, shared CSS design variables, local async resource loading, one WorkspaceProvider, client state with created Applications saved to sessionStorage, plain SVG graph, small local reusable UI library.
 
-Not included: backend, JSON Server, persistence, authentication, live cloud data, configurable columns, pagination, editing/deleting groups, graph dragging/zooming, external issue tracking. Sorting is deferred until core requirements work and needs a separate approved stage. E2E testing is out of scope. Automated tests use Vitest and React Testing Library (§10); their installation needs its own approved stage.
+Not included: backend, JSON Server, persistence beyond the current browser tab, authentication, live cloud data, configurable columns, pagination, editing/deleting groups, graph dragging/zooming, external issue tracking. Sorting is deferred until core requirements work and needs a separate approved stage. E2E testing is out of scope. Automated tests use Vitest and React Testing Library (§10); their installation needs its own approved stage.
 
 ## 2. Data model
 
@@ -73,7 +73,7 @@ createApplication(input: CreateApplicationInput): CreateApplicationResult;
 
 Trim name/description; reject blank name, empty selection, unavailable resource data, or unknown resource IDs. Deduplicate resource IDs. Generate the ID once per creation action, outside any state updater that React might re-evaluate. Append using the current state safely. Return the created Application so the caller can navigate to it. Form validation provides immediate feedback; the shared action protects data integrity.
 
-Refresh discards groups and reloads fixtures. No localStorage or any other persistence. Browser back/forward changes routes, not data history; it does not undo group creation.
+Created Applications are saved to sessionStorage (decided by Tali after Stage 6): they survive refreshes and typed URLs in the same tab and are cleared when the tab closes. Resources always reload from the fixtures. Stored data is untrusted: malformed entries are skipped, resource IDs that no longer exist are dropped once resources load, and the app-N counter continues after the highest saved ID. If storage is unavailable, the app keeps working in memory. No localStorage or IndexedDB. Browser back/forward changes routes, not data history; it does not undo group creation.
 
 ## 4. Routes and shell
 
@@ -95,7 +95,7 @@ App
 
 Sidebar uses route-aware links; Applications remains active for a selected group URL. Do not duplicate current page or selected application ID in React state. WorkspaceProvider stays above routed screens.
 
-If an Application ID is absent (including after refresh), show a friendly not-found state and link to /applications. Never invent group data to satisfy a stale URL.
+If an Application ID is absent (e.g. a URL from a closed tab), show a friendly not-found state and link to /applications. Never invent group data to satisfy a stale URL.
 
 ## 5. State ownership
 

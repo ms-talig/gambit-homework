@@ -74,7 +74,7 @@ Optional: an independent read-only review agent, ONLY after explicit approval of
 - [ ] Same resource can belong to multiple groups without copies in stored group data.
 - [ ] Navigation preserves groups, resets Resources local filters/selection.
 - [ ] Back/forward selects expected routes/groups.
-- [ ] Refresh clears groups; stale detail URL is handled without crashing.
+- [ ] Refresh and typed URLs keep groups in the same tab; a new tab starts empty; stale detail URL is handled without crashing.
 - [ ] Graph readable with one and maximum fixture count.
 - [ ] Keyboard navigation, labels, modal focus/Escape and visible focus checked.
 - [ ] test:run, lint and build pass; runtime console inspected.
@@ -156,5 +156,11 @@ Stage 6 (Application list and SVG graph, Claude Code; approved by Tali):
 - Measured layout: 1–2 nodes ~232px wide, 3–6 ~680px, 11 nodes ~1024×588px (scrolls inside the panel below ~820px).
 - Checks (run by Claude): test:run passed (6 files, 24 tests: member list matches the created selection exactly; missing URL shows not-found and its link works; no overlaps and in-bounds layout for 1–11 nodes); lint passed; build passed. Browser checks: assigned to Tali, results not recorded here.
 - Limitations: no per-type node icons from the mockup; with all 11 resources the graph needs horizontal scrolling in narrower windows.
+
+Post-Stage 6 change: tab-scoped persistence (Claude Code; requested and approved by Tali):
+- Trigger: during browser QA, Tali found that typing a URL (a full page load) cleared all Applications, and decided this was unacceptable. Memory-only state cannot survive a page load, so the documented "no browser storage" rule was lifted for sessionStorage only.
+- Files: new src/workspace/applicationStorage.ts (load with shape validation, save, prune unknown resource IDs) and applicationIds.ts (ID format, next number after the highest saved ID); WorkspaceProvider (lazy load, save on change, prune once resources load; counter starts after saved IDs); uiText.ts (not-found message); tests/setup.ts (clear storage between tests); tests: sidebar navigation keeps applications (ApplicationsPage), remount restores applications with unique IDs (WorkspaceProvider), malformed data and pruning (applicationStorage). CLAUDE.md, ARCHITECTURE.md §1/§3/§4 and the checklist updated.
+- Checks (run by Claude): test:run passed (7 files, 28 tests); lint passed; build passed. Browser check of reload/typed-URL behavior: assigned to Tali.
+- Limitations: data is per tab (a new tab starts empty); closing the tab clears it.
 
 For each approved stage append: scope approved, files changed, human decisions/review, checks/results, known limitations, approximate actual effort if measured. Do not invent times or outcomes.

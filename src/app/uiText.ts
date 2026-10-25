@@ -62,7 +62,7 @@ export const UI_TEXT = {
     selectPrompt: 'Select an application to view its resources.',
     notFound: {
       message:
-        'Application not found. Applications are kept in memory and are cleared when the page is refreshed.',
+        'Application not found. Applications are saved only in this browser tab and are cleared when it is closed.',
       link: 'Back to Applications',
     },
     graph: {

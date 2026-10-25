@@ -30,7 +30,7 @@ TypeScript has separate app/node/test project configs (tsconfig.test.json covers
 
 ## Scope and verification
 
-- Client memory only. No backend, JSON Server, localStorage, sessionStorage, or IndexedDB.
+- Client-side only. No backend or JSON Server. Created Applications persist in sessionStorage for the current browser tab (Tali's decision, 2026-10-25); no localStorage or IndexedDB.
 - Use CSS Modules and shared CSS variables. Reusable UI components live in src/components/ui.
 - Use the course code as a reference, not a wholesale copy. Adapt to TypeScript and accessibility requirements.
 - Run relevant checks for the approved change, normally lint and build after implementation. Report passed, failed, and not checked separately.

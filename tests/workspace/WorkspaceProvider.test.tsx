@@ -27,7 +27,8 @@ function WorkspaceProbe() {
       <ul aria-label="Applications">
         {applications.map((application) => (
           <li key={application.id}>
-            {application.name}: {application.resourceIds.join(', ')}
+            {application.id} {application.name}:{' '}
+            {application.resourceIds.join(', ')}
           </li>
         ))}
       </ul>
@@ -55,5 +56,31 @@ describe('WorkspaceProvider', () => {
     const items = within(list).getAllByRole('listitem')
     expect(items).toHaveLength(1)
     expect(items[0]).toHaveTextContent('Payments API: r-001, r-002')
+  })
+
+  it('restores saved applications after a remount and keeps IDs unique', async () => {
+    const user = userEvent.setup()
+    const renderWorkspace = () =>
+      render(
+        <WorkspaceProvider>
+          <WorkspaceProbe />
+        </WorkspaceProvider>,
+      )
+
+    // A remount stands in for a page reload in the same tab.
+    const { unmount } = renderWorkspace()
+    await screen.findByText(`Status: ${RESOURCES_STATUS.ready}`)
+    await user.click(screen.getByRole('button', { name: 'Create' }))
+    unmount()
+
+    renderWorkspace()
+    await screen.findByText(`Status: ${RESOURCES_STATUS.ready}`)
+    const list = screen.getByRole('list', { name: 'Applications' })
+    expect(within(list).getAllByRole('listitem')).toHaveLength(1)
+
+    await user.click(screen.getByRole('button', { name: 'Create' }))
+    const items = within(list).getAllByRole('listitem')
+    expect(items).toHaveLength(2)
+    expect(new Set(items.map((item) => item.textContent)).size).toBe(2)
   })
 })
