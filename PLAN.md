@@ -1,6 +1,6 @@
 # Gambit — gated implementation plan
 
-Global status: Stages 0, 0.5, 0.6, 1, 2 and 3 complete. Feature screens (Stages 4–6) not started. Every stage below requires its own explicit approval. Do not treat checked planning decisions as permission to code.
+Global status: Stages 0, 0.5, 0.6, 1, 2, 3 and 4 complete. Stages 5–7 not started. Every stage below requires its own explicit approval. Do not treat checked planning decisions as permission to code.
 
 Testing rule: from Stage 1 on, each stage proposes its test scenarios in its stage plan, writes the approved tests alongside the implementation, and runs npm run test:run, lint and build. Keep tests proportionate to the timebox and avoid duplicating behavior across suites (ARCHITECTURE §10).
 
@@ -134,5 +134,13 @@ Stage 3 (shell, routes and visual foundation, Claude Code; approved by Tali):
 - Design: / redirects with replace; /applications and /applications/:applicationId share ApplicationsPage; * shows not-found inside the layout. Sidebar uses NavLink and styles the active link via aria-current, so Applications stays active on detail URLs. Below 720px the sidebar becomes a top bar.
 - Checks (run by Claude): test:run passed (3 files, 7 tests); lint passed; build passed; dev server served /, /resources, /applications, /applications/app-1 and /xyz (HTTP 200). Browser checks: assigned to Tali, results not recorded here.
 - Limitations: pages are placeholders; the 720px breakpoint is duplicated in two CSS modules because CSS variables cannot be used in media queries.
+
+Stage 4 (resource browsing and selection, Claude Code; approved by Tali):
+- Files: src/types/models.ts (PROVIDERS/ENVIRONMENTS/CRITICALITIES constants, types derived); src/components/ui Button (+ buttonVariants.ts), SearchInput, Select, Checkbox, Badge, VisuallyHidden, Table, each with a CSS module, plus Search/ChevronDown icons; src/features/resources resourceFilters.ts, ResourceFilters, ResourceTable, SelectionToolbar, ResourcesPage (+ CSS modules); src/app/uiText.ts (all Resources text); tokens.css (badge, selected-row, control and icon-size tokens); tests/features/resources/ResourcesPage.test.tsx.
+- Design: filters and selected IDs live in ResourcesPage (reset on leaving the route); visible rows and hidden-selected count are derived, not stored. Search is case-insensitive substring on name; filters combine with AND; "All" removes a restriction. Loading, error, empty-data and no-results states are distinct. Name cells are row headers; row checkboxes have resource-specific accessible names; the table scrolls horizontally inside its container.
+- Contract adjustments (kept minimal at Tali's request): SearchInput is standalone (TextField deferred to Stage 5, when the dialog needs it); no Panel yet; Badge and VisuallyHidden added for criticality pills and the checkbox column header; Select and SearchInput generate or take accessible labels instead of an id prop. Create Application button deferred to Stage 5 with the dialog.
+- Human decisions: Tali required the combined-filter test to exercise search, provider, environment and criticality together.
+- Checks (run by Claude): test:run passed (4 files, 9 tests); lint passed; build passed. Browser checks (Stage 3 navigation and Stage 4 screen): assigned to Tali, results not recorded here.
+- Limitations: no sorting or select-all (out of scope); creation flow pending Stage 5.
 
 For each approved stage append: scope approved, files changed, human decisions/review, checks/results, known limitations, approximate actual effort if measured. Do not invent times or outcomes.

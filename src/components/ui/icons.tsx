@@ -33,6 +33,23 @@ export function DatabaseIcon(props: IconProps) {
   )
 }
 
+export function SearchIcon(props: IconProps) {
+  return (
+    <BaseIcon {...props}>
+      <circle cx="11" cy="11" r="7" />
+      <path d="m20 20-3.5-3.5" />
+    </BaseIcon>
+  )
+}
+
+export function ChevronDownIcon(props: IconProps) {
+  return (
+    <BaseIcon {...props}>
+      <path d="m6 9 6 6 6-6" />
+    </BaseIcon>
+  )
+}
+
 export function GridIcon(props: IconProps) {
   return (
     <BaseIcon {...props}>

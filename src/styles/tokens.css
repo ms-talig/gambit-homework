@@ -13,6 +13,17 @@
   --color-accent-hover: #175cd3;
   --color-accent-soft: #eaf2fe;
   --color-focus: #1570ef;
+  --color-row-selected: #f3f8ff;
+
+  /* Status badges */
+  --color-success-bg: #e6f6ec;
+  --color-success-text: #177a3c;
+  --color-warning-bg: #fdf3d6;
+  --color-warning-text: #93600a;
+  --color-alert-bg: #fdebdd;
+  --color-alert-text: #b9470f;
+  --color-danger-bg: #fde7e7;
+  --color-danger-text: #c01c1c;
 
   /* Spacing */
   --space-1: 4px;
@@ -46,4 +57,6 @@
 
   /* Layout */
   --sidebar-width: 240px;
+  --control-height: 40px;
+  --icon-size: 20px;
 }

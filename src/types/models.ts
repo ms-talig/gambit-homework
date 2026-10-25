@@ -1,6 +1,10 @@
-export type Provider = 'AWS' | 'GCP' | 'Azure'
-export type Environment = 'production' | 'staging' | 'development'
-export type Criticality = 'low' | 'medium' | 'high' | 'critical'
+export const PROVIDERS = ['AWS', 'GCP', 'Azure'] as const
+export const ENVIRONMENTS = ['production', 'staging', 'development'] as const
+export const CRITICALITIES = ['low', 'medium', 'high', 'critical'] as const
+
+export type Provider = (typeof PROVIDERS)[number]
+export type Environment = (typeof ENVIRONMENTS)[number]
+export type Criticality = (typeof CRITICALITIES)[number]
 
 export interface Resource {
   id: string

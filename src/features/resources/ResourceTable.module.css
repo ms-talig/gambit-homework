@@ -1,0 +1,28 @@
+.selectCell {
+  width: 1%;
+}
+
+.selectedRow > * {
+  background: var(--color-row-selected);
+}
+
+/* Criticality badge colors, keyed by the criticality value. */
+.low {
+  background: var(--color-success-bg);
+  color: var(--color-success-text);
+}
+
+.medium {
+  background: var(--color-warning-bg);
+  color: var(--color-warning-text);
+}
+
+.high {
+  background: var(--color-alert-bg);
+  color: var(--color-alert-text);
+}
+
+.critical {
+  background: var(--color-danger-bg);
+  color: var(--color-danger-text);
+}
