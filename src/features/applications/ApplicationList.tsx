@@ -37,7 +37,7 @@ export function ApplicationList({
                   {TEXT.resourceCount(application.resourceIds.length)}
                 </span>
                 {application.description && (
-                  <span className={styles.meta}>
+                  <span className={`${styles.meta} ${styles.description}`}>
                     {application.description}
                   </span>
                 )}

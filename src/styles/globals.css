@@ -15,6 +15,9 @@ body {
   font-size: var(--font-size-md);
   line-height: var(--line-height-base);
   -webkit-font-smoothing: antialiased;
+  /* Long unbroken user input (names, descriptions) wraps instead of
+     overflowing its container. */
+  overflow-wrap: break-word;
 }
 
 h1,
