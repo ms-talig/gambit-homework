@@ -19,6 +19,12 @@
   font-weight: var(--font-weight-semibold);
 }
 
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
 .hidden {
   color: var(--color-text-muted);
   font-size: var(--font-size-sm);

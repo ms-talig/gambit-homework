@@ -7,3 +7,12 @@ import { afterEach } from 'vitest'
 afterEach(() => {
   cleanup()
 })
+
+// jsdom lacks HTMLDialogElement.showModal/close. Test-only stand-ins that just
+// toggle `open`; focus containment and Escape are checked in a real browser.
+HTMLDialogElement.prototype.showModal ??= function (this: HTMLDialogElement) {
+  this.open = true
+}
+HTMLDialogElement.prototype.close ??= function (this: HTMLDialogElement) {
+  this.open = false
+}

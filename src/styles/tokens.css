@@ -54,6 +54,8 @@
 
   /* Elevation */
   --shadow-sm: 0 1px 2px rgb(15 23 42 / 6%);
+  --shadow-lg: 0 16px 40px rgb(15 23 42 / 16%);
+  --color-backdrop: rgb(15 23 42 / 40%);
 
   /* Layout */
   --sidebar-width: 240px;

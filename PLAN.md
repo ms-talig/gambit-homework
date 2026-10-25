@@ -1,6 +1,6 @@
 # Gambit — gated implementation plan
 
-Global status: Stages 0, 0.5, 0.6, 1, 2, 3 and 4 complete. Stages 5–7 not started. Every stage below requires its own explicit approval. Do not treat checked planning decisions as permission to code.
+Global status: Stages 0, 0.5, 0.6 and 1–5 complete. Stages 6–7 not started. Every stage below requires its own explicit approval. Do not treat checked planning decisions as permission to code.
 
 Testing rule: from Stage 1 on, each stage proposes its test scenarios in its stage plan, writes the approved tests alongside the implementation, and runs npm run test:run, lint and build. Keep tests proportionate to the timebox and avoid duplicating behavior across suites (ARCHITECTURE §10).
 
@@ -142,5 +142,12 @@ Stage 4 (resource browsing and selection, Claude Code; approved by Tali):
 - Human decisions: Tali required the combined-filter test to exercise search, provider, environment and criticality together.
 - Checks (run by Claude): test:run passed (4 files, 9 tests); lint passed; build passed. Browser checks (Stage 3 navigation and Stage 4 screen): assigned to Tali, results not recorded here.
 - Limitations: no sorting or select-all (out of scope); creation flow pending Stage 5.
+
+Stage 5 (create Application, Claude Code; approved by Tali):
+- Files: new src/components/ui Modal, Field (shared label/error layout), TextField, TextArea (+ CSS modules); new src/features/resources/CreateApplicationDialog (+ CSS module); SelectionToolbar (Create button, canCreate/onCreate); ResourcesPage (dialog state, submit, navigation); uiText.ts (dialog text); tokens.css (shadow, backdrop); tests/setup.ts (dialog stand-in); ResourcesPage.test.tsx (router wrapper, two new tests).
+- Design: native <dialog> opened with showModal while mounted (rendered conditionally, so each opening has a fresh draft); initial focus on the name field; focus returns to the opener on close if it still exists; Escape (cancel event) and Cancel close and discard the draft but keep the row selection; backdrop clicks do not close, to avoid losing input. Blank names get immediate field feedback (aria-invalid + aria-describedby, focus moved to the field); createApplication still validates; other failures show as an alert with the draft kept. Success closes the dialog, clears the selection and navigates to applicationPath(id).
+- Human decisions: Tali approved native dialog semantics with a minimal test-only showModal/close stand-in (jsdom lacks both), and required the success test to verify exactly one Application with the selected resource IDs in addition to navigation.
+- Checks (run by Claude): test:run passed (4 files, 11 tests); lint passed; build passed. Focus containment, Escape, focus restoration and backdrop behavior need the browser: assigned to Tali, results not recorded here.
+- Limitations: the Applications page is still a placeholder (Stage 6), so after creation it shows only the selected ID.
 
 For each approved stage append: scope approved, files changed, human decisions/review, checks/results, known limitations, approximate actual effort if measured. Do not invent times or outcomes.

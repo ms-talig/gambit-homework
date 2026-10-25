@@ -33,6 +33,17 @@ export const UI_TEXT = {
         : `${count} ${count === 1 ? 'resource' : 'resources'} selected`,
     hiddenSelectedCount: (count: number) => `${count} hidden by filters`,
     clearSelection: 'Clear selection',
+    createApplication: 'Create Application',
+    createDialog: {
+      title: 'Create Application',
+      subtitle: (count: number) =>
+        `Group ${count} selected ${count === 1 ? 'resource' : 'resources'}`,
+      nameLabel: 'Application name',
+      descriptionLabel: 'Description',
+      optional: '(optional)',
+      cancel: 'Cancel',
+      submit: 'Create',
+    },
   },
   applications: {
     navLabel: 'Applications',

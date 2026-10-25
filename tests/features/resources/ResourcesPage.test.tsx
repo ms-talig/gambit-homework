@@ -1,7 +1,10 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { MemoryRouter, Route, Routes, useParams } from 'react-router'
 import { describe, expect, it } from 'vitest'
+import { APPLICATION_ID_PARAM, ROUTES } from '../../../src/app/routes.ts'
 import { UI_TEXT } from '../../../src/app/uiText.ts'
+import { resources } from '../../../src/data/resources.ts'
 import { ResourcesPage } from '../../../src/features/resources/ResourcesPage.tsx'
 import { ALL } from '../../../src/features/resources/resourceFilters.ts'
 import type {
@@ -9,24 +12,74 @@ import type {
   Environment,
   Provider,
 } from '../../../src/types/models.ts'
+import { WORKSPACE_MESSAGES } from '../../../src/workspace/messages.ts'
+import { useWorkspace } from '../../../src/workspace/useWorkspace.ts'
 import { WorkspaceProvider } from '../../../src/workspace/WorkspaceProvider.tsx'
 
 const TEXT = UI_TEXT.resources
+const DIALOG_TEXT = TEXT.createDialog
 
 // Test inputs, type-checked against the model so typos fail to compile.
 const AWS: Provider = 'AWS'
 const PRODUCTION: Environment = 'production'
 const HIGH: Criticality = 'high'
 
+const WORKSPACE_PROBE_LABEL = 'Workspace probe'
+
+// Stands in for the Applications page: exposes the route parameter and the
+// stored applications so tests can assert navigation and created data.
+function WorkspaceProbe() {
+  const params = useParams<typeof APPLICATION_ID_PARAM>()
+  const { applications } = useWorkspace()
+
+  return (
+    <output aria-label={WORKSPACE_PROBE_LABEL}>
+      {JSON.stringify({
+        applicationId: params[APPLICATION_ID_PARAM],
+        applications,
+      })}
+    </output>
+  )
+}
+
 async function renderResourcesPage() {
   const user = userEvent.setup()
   render(
-    <WorkspaceProvider>
-      <ResourcesPage />
-    </WorkspaceProvider>,
+    <MemoryRouter initialEntries={[ROUTES.resources]}>
+      <WorkspaceProvider>
+        <Routes>
+          <Route path={ROUTES.resources} element={<ResourcesPage />} />
+          <Route path={ROUTES.applicationDetail} element={<WorkspaceProbe />} />
+        </Routes>
+      </WorkspaceProvider>
+    </MemoryRouter>,
   )
   await screen.findByRole('table', { name: TEXT.tableLabel })
   return user
+}
+
+function resourceIdByName(name: string) {
+  const resource = resources.find((candidate) => candidate.name === name)
+  if (!resource) throw new Error(`Unknown fixture resource: ${name}`)
+  return resource.id
+}
+
+async function selectResources(
+  user: ReturnType<typeof userEvent.setup>,
+  names: string[],
+) {
+  for (const name of names) {
+    await user.click(
+      screen.getByRole('checkbox', { name: TEXT.selectResource(name) }),
+    )
+  }
+}
+
+async function openCreateDialog(user: ReturnType<typeof userEvent.setup>) {
+  await user.click(
+    screen.getByRole('button', { name: TEXT.createApplication }),
+  )
+  return screen.getByRole('dialog', { name: DIALOG_TEXT.title })
 }
 
 // Resource names are the table's row headers.
@@ -115,5 +168,57 @@ describe('ResourcesPage', () => {
         name: TEXT.selectResource('payments-api-prod'),
       }),
     ).not.toBeChecked()
+  })
+
+  it('rejects a blank application name and keeps the draft', async () => {
+    const user = await renderResourcesPage()
+    await selectResources(user, ['payments-api-prod'])
+    const dialog = await openCreateDialog(user)
+
+    const nameInput = within(dialog).getByRole('textbox', {
+      name: DIALOG_TEXT.nameLabel,
+    })
+    const descriptionInput = within(dialog).getByRole('textbox', {
+      name: (accessibleName) =>
+        accessibleName.startsWith(DIALOG_TEXT.descriptionLabel),
+    })
+    await user.type(descriptionInput, 'Payment processing')
+    await user.type(nameInput, '   ')
+    await user.click(
+      within(dialog).getByRole('button', { name: DIALOG_TEXT.submit }),
+    )
+
+    expect(nameInput).toBeInvalid()
+    expect(nameInput).toHaveAccessibleDescription(
+      WORKSPACE_MESSAGES.nameRequired,
+    )
+    expect(descriptionInput).toHaveValue('Payment processing')
+    expect(screen.getByRole('dialog', { name: DIALOG_TEXT.title })).toBe(dialog)
+  })
+
+  it('creates one application from the selection and opens it', async () => {
+    const user = await renderResourcesPage()
+    const selectedNames = ['payments-api-prod', 'payments-db']
+    await selectResources(user, selectedNames)
+    const dialog = await openCreateDialog(user)
+
+    await user.type(
+      within(dialog).getByRole('textbox', { name: DIALOG_TEXT.nameLabel }),
+      'Payments API',
+    )
+    await user.click(
+      within(dialog).getByRole('button', { name: DIALOG_TEXT.submit }),
+    )
+
+    const probe = await screen.findByLabelText(WORKSPACE_PROBE_LABEL)
+    const { applicationId, applications } = JSON.parse(
+      probe.textContent ?? '',
+    )
+    expect(applications).toHaveLength(1)
+    expect(applications[0]).toMatchObject({
+      name: 'Payments API',
+      resourceIds: selectedNames.map(resourceIdByName),
+    })
+    expect(applicationId).toBe(applications[0].id)
   })
 })

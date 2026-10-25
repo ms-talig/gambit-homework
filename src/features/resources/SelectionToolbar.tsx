@@ -8,13 +8,17 @@ const TEXT = UI_TEXT.resources
 interface SelectionToolbarProps {
   selectedCount: number
   hiddenSelectedCount: number
+  canCreate: boolean
   onClear: () => void
+  onCreate: () => void
 }
 
 export function SelectionToolbar({
   selectedCount,
   hiddenSelectedCount,
+  canCreate,
   onClear,
+  onCreate,
 }: SelectionToolbarProps) {
   return (
     <div className={styles.toolbar}>
@@ -28,13 +32,18 @@ export function SelectionToolbar({
           </span>
         )}
       </p>
-      <Button
-        variant={BUTTON_VARIANT.secondary}
-        onClick={onClear}
-        disabled={selectedCount === 0}
-      >
-        {TEXT.clearSelection}
-      </Button>
+      <div className={styles.actions}>
+        <Button
+          variant={BUTTON_VARIANT.secondary}
+          onClick={onClear}
+          disabled={selectedCount === 0}
+        >
+          {TEXT.clearSelection}
+        </Button>
+        <Button onClick={onCreate} disabled={!canCreate}>
+          {TEXT.createApplication}
+        </Button>
+      </div>
     </div>
   )
 }

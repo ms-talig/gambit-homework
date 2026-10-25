@@ -1,8 +1,12 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router'
+import { applicationPath } from '../../app/routes.ts'
 import { UI_TEXT } from '../../app/uiText.ts'
 import { PageHeader } from '../../components/ui/PageHeader.tsx'
 import { useWorkspace } from '../../workspace/useWorkspace.ts'
 import { RESOURCES_STATUS } from '../../workspace/WorkspaceContext.ts'
+import { CreateApplicationDialog } from './CreateApplicationDialog.tsx'
+import type { ApplicationDraft } from './CreateApplicationDialog.tsx'
 import { ResourceFilters } from './ResourceFilters.tsx'
 import { DEFAULT_FILTERS, filterResources } from './resourceFilters.ts'
 import { ResourceTable } from './ResourceTable.tsx'
@@ -12,9 +16,12 @@ import { SelectionToolbar } from './SelectionToolbar.tsx'
 const TEXT = UI_TEXT.resources
 
 export function ResourcesPage() {
-  const { resources, resourcesStatus, resourcesError } = useWorkspace()
+  const { resources, resourcesStatus, resourcesError, createApplication } =
+    useWorkspace()
+  const navigate = useNavigate()
   const [filters, setFilters] = useState(DEFAULT_FILTERS)
   const [selectedResourceIds, setSelectedResourceIds] = useState<string[]>([])
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
 
   const visibleResources = filterResources(resources, filters)
   const visibleIds = new Set(visibleResources.map((resource) => resource.id))
@@ -28,6 +35,21 @@ export function ResourcesPage() {
         ? current.filter((id) => id !== resourceId)
         : [...current, resourceId],
     )
+  }
+
+  function handleCreate(draft: ApplicationDraft) {
+    const result = createApplication({
+      ...draft,
+      resourceIds: selectedResourceIds,
+    })
+
+    if (result.ok) {
+      setIsCreateDialogOpen(false)
+      setSelectedResourceIds([])
+      navigate(applicationPath(result.application.id))
+    }
+
+    return result
   }
 
   function renderContent() {
@@ -69,9 +91,21 @@ export function ResourcesPage() {
         <SelectionToolbar
           selectedCount={selectedResourceIds.length}
           hiddenSelectedCount={hiddenSelectedCount}
+          canCreate={
+            selectedResourceIds.length > 0 &&
+            resourcesStatus === RESOURCES_STATUS.ready
+          }
           onClear={() => setSelectedResourceIds([])}
+          onCreate={() => setIsCreateDialogOpen(true)}
         />
       </div>
+      {isCreateDialogOpen && (
+        <CreateApplicationDialog
+          selectedCount={selectedResourceIds.length}
+          onCancel={() => setIsCreateDialogOpen(false)}
+          onSubmit={handleCreate}
+        />
+      )}
     </>
   )
 }
