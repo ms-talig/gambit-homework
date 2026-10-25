@@ -1,0 +1,22 @@
+.layout {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+.main {
+  min-width: 0;
+  padding: var(--space-6) var(--space-7);
+}
+
+/* Keep in sync with the breakpoint in Sidebar.module.css. */
+@media (max-width: 720px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+  }
+
+  .main {
+    padding: var(--space-5) var(--space-4);
+  }
+}

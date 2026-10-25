@@ -1,0 +1,16 @@
+import { Link } from 'react-router'
+import { PageHeader } from '../components/ui/PageHeader.tsx'
+import { ROUTES } from './routes.ts'
+import { UI_TEXT } from './uiText.ts'
+
+export function NotFoundPage() {
+  return (
+    <>
+      <PageHeader
+        title={UI_TEXT.notFound.title}
+        subtitle={UI_TEXT.notFound.message}
+      />
+      <Link to={ROUTES.resources}>{UI_TEXT.notFound.backLink}</Link>
+    </>
+  )
+}

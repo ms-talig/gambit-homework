@@ -1,6 +1,6 @@
 # Gambit — gated implementation plan
 
-Global status: Stages 0, 0.5, 0.6 and 1 complete. Feature implementation not started. Every stage below requires its own explicit approval. Do not treat checked planning decisions as permission to code.
+Global status: Stages 0, 0.5, 0.6, 1, 2 and 3 complete. Feature screens (Stages 4–6) not started. Every stage below requires its own explicit approval. Do not treat checked planning decisions as permission to code.
 
 Testing rule: from Stage 1 on, each stage proposes its test scenarios in its stage plan, writes the approved tests alongside the implementation, and runs npm run test:run, lint and build. Keep tests proportionate to the timebox and avoid duplicating behavior across suites (ARCHITECTURE §10).
 
@@ -119,5 +119,20 @@ Stage 1 (typed data and local loader, Claude Code; approved by Tali):
 - Dataset: unique IDs r-001..r-011; AWS 5 / GCP 3 / Azure 3; production 6 / staging 3 / development 2; critical 2 / high 4 / medium 3 / low 2; openIssues 0–5. Shared name words ("payment", "api", "analytics", "customer-portal") make search return several rows; AWS + production + high returns three rows for combined-filter checks.
 - Checks (run by Claude): test:run passed (existing smoke test); lint passed; build passed (type-checks the fixtures). Ad-hoc Node script (not a committed test) confirmed the counts above and that mutating a returned resource's name and tags left the fixtures and later calls unchanged.
 - Limitations: data is not yet used by any screen; no dedicated tests per plan.
+
+Stage 2 (shared workspace state, Claude Code; approved by Tali):
+- Files added: src/workspace/WorkspaceContext.ts (context, WorkspaceValue, CreateApplicationResult), WorkspaceProvider.tsx, useWorkspace.ts, buildApplication.ts; tests/workspace/buildApplication.test.ts, tests/workspace/WorkspaceProvider.test.tsx. Modified: src/App.tsx (wrapped in WorkspaceProvider; no visible change).
+- Design: resource loading is one discriminated-union state (loading/ready/error), exposed as resources, resourcesStatus and resourcesError; applications start empty; loading effect ignores stale completions. createApplication checks resourcesStatus, then calls pure buildApplication (trim name/description, dedupe IDs, reject blank name, empty selection and unknown IDs), and appends with a functional update.
+- Human decisions: Tali required the app-N ID counter to be scoped to the provider instance (useRef) and generated outside the state updater, and the loading-status check to stay in createApplication rather than the pure function. Counter chosen over crypto.randomUUID because randomUUID needs a secure context.
+- Checks (run by Claude): test:run passed (3 files, 7 tests; no act warnings); lint passed; build passed.
+- Limitations: no UI consumes the workspace yet; error state is not reachable with local fixtures and is not tested.
+- Review follow-up (requested by Tali): user-facing messages moved to src/workspace/messages.ts (WORKSPACE_MESSAGES), the ID prefix to a constant, and resource statuses to RESOURCES_STATUS with the type derived from it; tests reference the same constants. test:run, lint and build passed.
+
+Stage 3 (shell, routes and visual foundation, Claude Code; approved by Tali):
+- Dependency: react-router 8.5.0 (peers react/react-dom >=19.2.7, Node >=22.22 satisfied; declarative API verified in the package before install). No other package versions changed.
+- Files: src/App.tsx moved to src/app/App.tsx (BrowserRouter > WorkspaceProvider > AppRoutes); new src/app/AppRoutes.tsx, routes.ts (ROUTES, APPLICATION_ID_PARAM, applicationPath), uiText.ts (UI_TEXT), NotFoundPage.tsx; src/layout/AppLayout and Sidebar (+ CSS modules); src/components/ui/PageHeader (+ CSS module) and icons.tsx; placeholder ResourcesPage and ApplicationsPage; src/styles/tokens.css and globals.css; src/main.tsx imports. Smoke test moved to tests/app/App.test.tsx and now checks the / → /resources redirect.
+- Design: / redirects with replace; /applications and /applications/:applicationId share ApplicationsPage; * shows not-found inside the layout. Sidebar uses NavLink and styles the active link via aria-current, so Applications stays active on detail URLs. Below 720px the sidebar becomes a top bar.
+- Checks (run by Claude): test:run passed (3 files, 7 tests); lint passed; build passed; dev server served /, /resources, /applications, /applications/app-1 and /xyz (HTTP 200). Browser checks: assigned to Tali, results not recorded here.
+- Limitations: pages are placeholders; the 720px breakpoint is duplicated in two CSS modules because CSS variables cannot be used in media queries.
 
 For each approved stage append: scope approved, files changed, human decisions/review, checks/results, known limitations, approximate actual effort if measured. Do not invent times or outcomes.
