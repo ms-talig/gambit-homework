@@ -1,6 +1,6 @@
 # Gambit — gated implementation plan
 
-Global status: Stages 0, 0.5, 0.6 and 1–5 complete. Stages 6–7 not started. Every stage below requires its own explicit approval. Do not treat checked planning decisions as permission to code.
+Global status: Stages 0, 0.5, 0.6 and 1–6 complete. Stage 7 not started. Every stage below requires its own explicit approval. Do not treat checked planning decisions as permission to code.
 
 Testing rule: from Stage 1 on, each stage proposes its test scenarios in its stage plan, writes the approved tests alongside the implementation, and runs npm run test:run, lint and build. Keep tests proportionate to the timebox and avoid duplicating behavior across suites (ARCHITECTURE §10).
 
@@ -149,5 +149,12 @@ Stage 5 (create Application, Claude Code; approved by Tali):
 - Human decisions: Tali approved native dialog semantics with a minimal test-only showModal/close stand-in (jsdom lacks both), and required the success test to verify exactly one Application with the selected resource IDs in addition to navigation.
 - Checks (run by Claude): test:run passed (4 files, 11 tests); lint passed; build passed. Focus containment, Escape, focus restoration and backdrop behavior need the browser: assigned to Tali, results not recorded here.
 - Limitations: the Applications page is still a placeholder (Stage 6), so after creation it shows only the selected ID.
+
+Stage 6 (Application list and SVG graph, Claude Code; approved by Tali):
+- Files: src/features/applications ApplicationsPage (replaces placeholder), ApplicationList, ApplicationDetails, ApplicationGraph, graphLayout.ts (+ CSS modules); src/components/ui Panel (+ CSS module), CubeIcon; VisuallyHidden now renders a div so it can wrap a list; uiText.ts (Applications text; placeholder label removed); tokens.css (on-accent colors, xs font size); tests/features/applications ApplicationsPage.test.tsx and graphLayout.test.ts.
+- Design: the selected application comes only from the URL; the page resolves member resources by ID from shared state. States: empty (link to Resources), list + select prompt, not found (explains in-memory data and refresh, links to /applications), list + details. Graph: pure deterministic layout places nodes evenly on an ellipse, growing it until no boxes overlap; the SVG scales to its panel down to 80% and then scrolls inside the panel so labels stay readable; long labels are shortened with an ellipsis. The SVG is one labelled image; a visually hidden list gives screen readers the member names and types.
+- Measured layout: 1–2 nodes ~232px wide, 3–6 ~680px, 11 nodes ~1024×588px (scrolls inside the panel below ~820px).
+- Checks (run by Claude): test:run passed (6 files, 24 tests: member list matches the created selection exactly; missing URL shows not-found and its link works; no overlaps and in-bounds layout for 1–11 nodes); lint passed; build passed. Browser checks: assigned to Tali, results not recorded here.
+- Limitations: no per-type node icons from the mockup; with all 11 resources the graph needs horizontal scrolling in narrower windows.
 
 For each approved stage append: scope approved, files changed, human decisions/review, checks/results, known limitations, approximate actual effort if measured. Do not invent times or outcomes.

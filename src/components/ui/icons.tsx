@@ -50,6 +50,16 @@ export function ChevronDownIcon(props: IconProps) {
   )
 }
 
+export function CubeIcon(props: IconProps) {
+  return (
+    <BaseIcon {...props}>
+      <path d="M12 3 20 7.5v9L12 21l-8-4.5v-9L12 3Z" />
+      <path d="m4 7.5 8 4.5 8-4.5" />
+      <path d="M12 12v9" />
+    </BaseIcon>
+  )
+}
+
 export function GridIcon(props: IconProps) {
   return (
     <BaseIcon {...props}>

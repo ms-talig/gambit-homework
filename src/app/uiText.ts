@@ -49,7 +49,33 @@ export const UI_TEXT = {
     navLabel: 'Applications',
     title: 'Applications',
     subtitle: 'View your applications and their resources',
-    selectedLabel: 'Selected application:',
+    listLabel: 'Applications',
+    resourceCount: (count: number) =>
+      `${count} ${count === 1 ? 'resource' : 'resources'}`,
+    connectedCount: (count: number) =>
+      `${count} connected ${count === 1 ? 'resource' : 'resources'}`,
+    empty: {
+      message:
+        'No applications yet. Select resources and create an application to see it here.',
+      link: 'Go to Resources',
+    },
+    selectPrompt: 'Select an application to view its resources.',
+    notFound: {
+      message:
+        'Application not found. Applications are kept in memory and are cleared when the page is refreshed.',
+      link: 'Back to Applications',
+    },
+    graph: {
+      applicationNodeLabel: 'Application',
+      title: (name: string) => `${name} resource graph`,
+      description: (name: string, count: number) =>
+        `${name} is connected to ${count} ${count === 1 ? 'resource' : 'resources'}.`,
+      membersLabel: (name: string) => `${name} resources`,
+      resourceDetails: (type: string, provider: string) =>
+        `${type} · ${provider}`,
+      memberSummary: (name: string, type: string, provider: string) =>
+        `${name}: ${type} · ${provider}`,
+    },
   },
   notFound: {
     title: 'Page not found',

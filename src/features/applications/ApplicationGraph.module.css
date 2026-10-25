@@ -1,0 +1,54 @@
+/* Large graphs scroll inside the panel rather than shrinking illegibly. */
+.container {
+  overflow-x: auto;
+}
+
+.graph {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
+.edge {
+  stroke: var(--color-accent);
+  stroke-width: 2;
+}
+
+.centerNode {
+  fill: var(--color-accent);
+}
+
+.resourceNode {
+  fill: var(--color-surface-subtle);
+  stroke: var(--color-border);
+}
+
+.centerName,
+.centerLabel,
+.resourceName,
+.resourceDetails {
+  text-anchor: middle;
+}
+
+.centerName {
+  fill: var(--color-on-accent);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+}
+
+.centerLabel {
+  fill: var(--color-on-accent-muted);
+  font-size: var(--font-size-xs);
+}
+
+.resourceName {
+  fill: var(--color-text);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.resourceDetails {
+  fill: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+}

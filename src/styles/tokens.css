@@ -14,6 +14,8 @@
   --color-accent-soft: #eaf2fe;
   --color-focus: #1570ef;
   --color-row-selected: #f3f8ff;
+  --color-on-accent: #ffffff;
+  --color-on-accent-muted: #d6e6fd;
 
   /* Status badges */
   --color-success-bg: #e6f6ec;
@@ -42,6 +44,7 @@
   /* Typography */
   --font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue',
     Arial, sans-serif;
+  --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-md: 1rem;
   --font-size-lg: 1.125rem;
