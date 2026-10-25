@@ -37,6 +37,19 @@ export function ResourcesPage() {
     )
   }
 
+  function toggleAllShown(selected: boolean) {
+    setSelectedResourceIds((current) =>
+      selected
+        ? [
+            ...current,
+            ...visibleResources
+              .map((resource) => resource.id)
+              .filter((resourceId) => !current.includes(resourceId)),
+          ]
+        : current.filter((resourceId) => !visibleIds.has(resourceId)),
+    )
+  }
+
   function handleCreate(draft: ApplicationDraft) {
     const result = createApplication({
       ...draft,
@@ -78,6 +91,7 @@ export function ResourcesPage() {
         resources={visibleResources}
         selectedResourceIds={selectedResourceIds}
         onToggleResource={toggleResource}
+        onToggleAllShown={toggleAllShown}
       />
     )
   }

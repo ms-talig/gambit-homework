@@ -164,7 +164,7 @@ interface ResourceFiltersValue {
 
 Page combines dialog fields with its selected IDs and calls createApplication. The generic Modal never knows about createApplication.
 
-Table columns fixed: selection, name, type, provider, environment, criticality, open issues. No user-configurable columns. Selection uses IDs, not array indices. Row checkboxes have resource-specific labels. Header select-all was not agreed; omit in core scope even if a mockup shows it.
+Table columns fixed: selection, name, type, provider, environment, criticality, open issues. No user-configurable columns. Selection uses IDs, not array indices. Row checkboxes have resource-specific labels. Header select-all (added at Tali's request after Stage 6) acts on the rows currently shown: it selects all shown rows, or clears them when all are selected, and never changes rows hidden by filters. It is partially checked when only some shown rows are selected.
 
 Search matches part of name, case-insensitively. Filters combine using AND. "all" means no restriction for that attribute. Filtering is entirely local.
 

@@ -3,7 +3,6 @@ import { Badge } from '../../components/ui/Badge.tsx'
 import { Checkbox } from '../../components/ui/Checkbox.tsx'
 import { Table } from '../../components/ui/Table.tsx'
 import type { TableColumn } from '../../components/ui/Table.tsx'
-import { VisuallyHidden } from '../../components/ui/VisuallyHidden.tsx'
 import type { Resource } from '../../types/models.ts'
 import styles from './ResourceTable.module.css'
 
@@ -13,19 +12,34 @@ interface ResourceTableProps {
   resources: Resource[]
   selectedResourceIds: string[]
   onToggleResource: (resourceId: string) => void
+  // Selects or clears every row currently shown; hidden rows are untouched.
+  onToggleAllShown: (selected: boolean) => void
 }
 
 export function ResourceTable({
   resources,
   selectedResourceIds,
   onToggleResource,
+  onToggleAllShown,
 }: ResourceTableProps) {
   const selectedIds = new Set(selectedResourceIds)
+  const shownSelectedCount = resources.filter((resource) =>
+    selectedIds.has(resource.id),
+  ).length
+  const allShownSelected =
+    resources.length > 0 && shownSelectedCount === resources.length
 
   const columns: TableColumn<Resource>[] = [
     {
       id: 'select',
-      header: <VisuallyHidden>{TEXT.columns.select}</VisuallyHidden>,
+      header: (
+        <Checkbox
+          label={TEXT.selectAllShown}
+          checked={allShownSelected}
+          indeterminate={shownSelectedCount > 0 && !allShownSelected}
+          onChange={onToggleAllShown}
+        />
+      ),
       cell: (resource) => (
         <Checkbox
           label={TEXT.selectResource(resource.name)}

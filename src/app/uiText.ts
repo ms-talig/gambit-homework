@@ -15,7 +15,6 @@ export const UI_TEXT = {
     },
     tableLabel: 'Cloud resources',
     columns: {
-      select: 'Select',
       name: 'Name',
       type: 'Type',
       provider: 'Provider',
@@ -24,6 +23,7 @@ export const UI_TEXT = {
       openIssues: 'Open issues',
     },
     selectResource: (name: string) => `Select ${name}`,
+    selectAllShown: 'Select all shown resources',
     loading: 'Loading resources...',
     empty: 'There are no resources to display.',
     noResults: 'No resources match your search and filters.',

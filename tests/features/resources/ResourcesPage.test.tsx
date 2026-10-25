@@ -21,6 +21,7 @@ const DIALOG_TEXT = TEXT.createDialog
 
 // Test inputs, type-checked against the model so typos fail to compile.
 const AWS: Provider = 'AWS'
+const GCP: Provider = 'GCP'
 const PRODUCTION: Environment = 'production'
 const HIGH: Criticality = 'high'
 
@@ -168,6 +169,36 @@ describe('ResourcesPage', () => {
         name: TEXT.selectResource('payments-api-prod'),
       }),
     ).not.toBeChecked()
+  })
+
+  it('selects and clears only the shown rows with the header checkbox', async () => {
+    const user = await renderResourcesPage()
+    const selectAll = screen.getByRole('checkbox', {
+      name: TEXT.selectAllShown,
+    })
+
+    // An AWS row selected before filtering must survive select-all changes.
+    await selectResources(user, ['payments-db'])
+    await user.selectOptions(screen.getByLabelText(TEXT.filters.provider), GCP)
+    expect(selectAll).not.toBeChecked()
+
+    await selectResources(user, ['website-assets'])
+    expect(selectAll).toBePartiallyChecked()
+
+    await user.click(selectAll)
+    expect(selectAll).toBeChecked()
+    for (const checkbox of screen.getAllByRole('checkbox', {
+      name: (accessibleName) => accessibleName !== TEXT.selectAllShown,
+    })) {
+      expect(checkbox).toBeChecked()
+    }
+    expect(screen.getByText(TEXT.selectedCount(4))).toBeInTheDocument()
+    expect(screen.getByText(TEXT.hiddenSelectedCount(1))).toBeInTheDocument()
+
+    await user.click(selectAll)
+    expect(selectAll).not.toBeChecked()
+    expect(screen.getByText(TEXT.selectedCount(1))).toBeInTheDocument()
+    expect(screen.getByText(TEXT.hiddenSelectedCount(1))).toBeInTheDocument()
   })
 
   it('rejects a blank application name and keeps the draft', async () => {

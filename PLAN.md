@@ -163,4 +163,9 @@ Post-Stage 6 change: tab-scoped persistence (Claude Code; requested and approved
 - Checks (run by Claude): test:run passed (7 files, 28 tests); lint passed; build passed. Browser check of reload/typed-URL behavior: assigned to Tali.
 - Limitations: data is per tab (a new tab starts empty); closing the tab clears it.
 
+Post-Stage 6 change: header select-all (Claude Code; requested by Tali, reversing the earlier "omit select-all" decision):
+- Behavior: acts on shown rows only; partially checked when some shown rows are selected; hidden selections are never changed.
+- Files: Checkbox (optional indeterminate, set as a DOM property), ResourceTable (header checkbox, onToggleAllShown), ResourcesPage (toggleAllShown), uiText.ts (selectAllShown; unused column label removed), ARCHITECTURE.md §7; test in ResourcesPage.test.tsx.
+- Checks (run by Claude): test:run passed (7 files, 29 tests); lint passed; build passed. Browser check: assigned to Tali.
+
 For each approved stage append: scope approved, files changed, human decisions/review, checks/results, known limitations, approximate actual effort if measured. Do not invent times or outcomes.
