@@ -1,6 +1,6 @@
 # Gambit — gated implementation plan
 
-Global status: Stages 0 and 0.5 complete. Feature implementation not started. Every stage below requires its own explicit approval. Do not treat checked planning decisions as permission to code.
+Global status: Stages 0, 0.5 and 0.6 complete. Feature implementation not started. Every stage below requires its own explicit approval. Do not treat checked planning decisions as permission to code.
 
 Testing rule: from Stage 1 on, each stage proposes its test scenarios in its stage plan, writes the approved tests alongside the implementation, and runs npm run test:run, lint and build. Keep tests proportionate to the timebox and avoid duplicating behavior across suites (ARCHITECTURE §10).
 
@@ -105,5 +105,12 @@ Documentation update (testing strategy, Claude Code; approved by Tali with adjus
 - Files changed: ARCHITECTURE.md (§1 scope note, tests/ in §9 tree, new §10 Testing, references renumbered to §11), PLAN.md (status, testing rule, Stage 0.6, per-stage tests, checklist), CLAUDE.md.
 - Human decisions: Tali required proportionate tests focused on five priority behaviors, no fixture/trivial-wrapper tests, no duplicated suites, test/test:run scripts, peer-dependency verification including @testing-library/dom, and jest-dom kept as a Stage 0.6 proposal.
 - Checks: stale-phrase search and diff review. Lint/build not run (documentation only).
+
+Stage 0.6 (test infrastructure, Claude Code; approved by Tali):
+- Compatibility checked first (Node 24.20, React 19.3, Vite 8.3, TypeScript 6.0): all engines and peer ranges satisfied; existing dependency versions unchanged.
+- Installed dev dependencies: vitest 5.0.5, @testing-library/react 16.3.3, @testing-library/dom 10.4.2, @testing-library/user-event 14.6.8, @testing-library/jest-dom 7.0.1, jsdom 30.1.3.
+- Files changed: package.json/package-lock.json (dev dependencies, "test": "vitest", "test:run": "vitest run"), vite.config.ts (test block: jsdom, tests/**/*.test.{ts,tsx}, tests/setup.ts), tsconfig.json (reference), new tsconfig.test.json (extends app config, includes tests/), new tests/setup.ts (jest-dom matchers, RTL cleanup), new tests/App.test.tsx (smoke test for the heading). ESLint needed no change: its **/*.{ts,tsx} pattern already lints tests/.
+- Checks (run by Claude): test:run passed (1 file, 1 test); lint passed; build passed and type-checks tests/ through tsc -b; no test code in dist.
+- Limitations: npm reported unapproved install scripts for optional fsevents; left unapproved, not needed for tests.
 
 For each approved stage append: scope approved, files changed, human decisions/review, checks/results, known limitations, approximate actual effort if measured. Do not invent times or outcomes.

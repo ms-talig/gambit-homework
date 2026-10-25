@@ -17,14 +17,16 @@ Read ARCHITECTURE.md and PLAN.md before proposing work. These describe the agree
 
 ## Current stack baseline
 
-Checked package.json on 2026-10-25: React/React DOM 19, TypeScript ~6.0, Vite 8 with @vitejs/plugin-react, ESLint 10 flat config. Recheck actual files before work; do not upgrade this baseline automatically.
+Checked package.json on 2026-10-25: React/React DOM 19, TypeScript ~6.0, Vite 8 with @vitejs/plugin-react, ESLint 10 flat config. Testing (Stage 0.6): Vitest 5, React Testing Library 16 with @testing-library/dom, user-event, jest-dom, jsdom; config lives in vite.config.ts. Recheck actual files before work; do not upgrade this baseline automatically.
 
-TypeScript has separate app/node project configs. Follow their restrictions, including type-only imports where required. No router, state library, formatter, or test runner is currently declared.
+TypeScript has separate app/node/test project configs (tsconfig.test.json covers tests/). Follow their restrictions, including type-only imports where required. No router, state library, or formatter is currently declared.
 
 - npm run dev — development server
 - npm run build — tsc -b && vite build
 - npm run lint — eslint .
 - npm run preview — production preview
+- npm test — Vitest in watch mode
+- npm run test:run — single Vitest run; use for completion checks
 
 ## Scope and verification
 
