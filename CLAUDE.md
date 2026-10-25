@@ -76,5 +76,3 @@ TypeScript has separate app/node project configs. Follow their restrictions, inc
 
 This section supersedes earlier guidance that treated automated
 testing as optional or placed test files alongside source files.
-Update ARCHITECTURE.md and PLAN.md to match this decision during
-the next explicitly approved documentation step.

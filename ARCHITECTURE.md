@@ -10,7 +10,7 @@ The assignment targets implementation, pragmatic scope, no backend, client-held 
 
 Agreed: React + TypeScript + Vite, React Router declarative routing, CSS Modules, shared CSS design variables, local async resource loading, one WorkspaceProvider, memory-only state, plain SVG graph, small local reusable UI library.
 
-Not included: backend, JSON Server, persistence, authentication, live cloud data, configurable columns, pagination, editing/deleting groups, graph dragging/zooming, external issue tracking. Sorting is deferred until core requirements work and needs a separate approved stage. No automated test dependency is approved yet.
+Not included: backend, JSON Server, persistence, authentication, live cloud data, configurable columns, pagination, editing/deleting groups, graph dragging/zooming, external issue tracking. Sorting is deferred until core requirements work and needs a separate approved stage. E2E testing is out of scope. Automated tests use Vitest and React Testing Library (§10); their installation needs its own approved stage.
 
 ## 2. Data model
 
@@ -207,11 +207,34 @@ src/
   features/applications/ page, list, details, graph
   components/ui/       shared primitives and generic Table
   styles/              globals.css, tokens.css
+tests/                 root-level; mirrors src/, no tests beside source files
+  setup.ts             shared test setup
+  workspace/           e.g. WorkspaceProvider.test.tsx
+  features/resources/  e.g. ResourcesPage.test.tsx
+  features/applications/ e.g. ApplicationsPage.test.tsx
 ```
 
 Place component .module.css files beside components. Shared tokens cover colors, spacing, radii and typography. Match supplied mockups' light surfaces, blue accent, sidebar and spacing, not their literal demo groups or unsupported controls. Keep controls keyboard-accessible, focus visible, labels readable and layout usable on narrower screens. Do not add Tailwind or another UI system without approval.
 
-## 10. References and interpretation
+## 10. Testing
+
+Tools: Vitest, React Testing Library, @testing-library/user-event, jsdom. No E2E framework in current scope.
+
+Location: all tests live in a root-level tests/ directory that mirrors src/ (src/features/resources/ResourcesPage.tsx → tests/features/resources/ResourcesPage.test.tsx). Never place tests beside production files. Shared setup lives in tests/setup.ts. Test discovery, TypeScript and lint coverage for tests/ are configured in the test-infrastructure stage (PLAN.md Stage 0.6).
+
+Scope is proportionate to the 1–2 hour timebox. Priority behaviors:
+
+- Search and filters working together.
+- Selection surviving filtering.
+- Invalid Application creation being rejected.
+- Successful creation showing the correct member resources.
+- Missing Application URLs being handled.
+
+Prefer integration tests that render real components with the providers they need, interact through user-event, and assert what the user sees using accessible queries (role, label, text). Add standalone unit tests only where meaningful logic warrants them. Do not test individual fixture attributes or trivial wrappers, and do not duplicate the same behavior across suites. Test observable behavior, not internal state.
+
+Limits: jsdom performs no layout and has limited native dialog/focus support. Visual checks, focus and modal behavior still need the browser checklist in PLAN.md; tests do not replace it.
+
+## 11. References and interpretation
 
 - Original brief: Gambit_FE_TakeHome.docx.pdf, supplied separately.
 - visuals/ contains the approved Resources/dialog and Applications mockups.
