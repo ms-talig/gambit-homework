@@ -60,6 +60,10 @@
   --shadow-lg: 0 16px 40px rgb(15 23 42 / 16%);
   --color-backdrop: rgb(15 23 42 / 40%);
 
+  /* Motion */
+  --duration-normal: 200ms;
+  --easing-standard: cubic-bezier(0.2, 0, 0, 1);
+
   /* Layout */
   --sidebar-width: 240px;
   --control-height: 40px;

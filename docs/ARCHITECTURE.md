@@ -240,7 +240,7 @@ Limits: jsdom performs no layout and has limited native dialog/focus support. Vi
 ## 11. References and interpretation
 
 - Original brief: Gambit_FE_TakeHome.docx.pdf, supplied separately.
-- visuals/ contains the approved Resources/dialog and Applications mockups.
+- docs/visuals/ contains the approved Resources/dialog and Applications mockups.
 - Optional course source: 282-wrapup (1).zip, supplied separately; Table/SortableTable/Button/Panel demonstrate composition, not mandatory dependencies.
 - User decisions explicitly override illustrative mock details. If the brief and plan conflict, report the exact discrepancy before implementation.
 

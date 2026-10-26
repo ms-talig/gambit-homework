@@ -1,6 +1,6 @@
 # Gambit frontend take-home — working agreement
 
-Read ARCHITECTURE.md and PLAN.md before proposing work. These describe the agreed design; they do not authorize implementing all stages.
+Read docs/ARCHITECTURE.md and docs/PLAN.md before proposing work. These describe the agreed design; they do not authorize implementing all stages.
 
 ## Collaboration: strictly incremental
 
@@ -34,9 +34,9 @@ TypeScript has separate app/node/test project configs (tsconfig.test.json covers
 - Use CSS Modules and shared CSS variables. Reusable UI components live in src/components/ui.
 - Use the course code as a reference, not a wholesale copy. Adapt to TypeScript and accessibility requirements.
 - Run relevant checks for the approved change, normally lint and build after implementation. Report passed, failed, and not checked separately.
-- Lint/build do not prove UI behavior. Use the browser acceptance checklist in PLAN.md and state who performed each check.
+- Lint/build do not prove UI behavior. Use the browser acceptance checklist in docs/PLAN.md and state who performed each check.
 - Report remaining limitations honestly. Never claim a browser check or automated test that was not performed.
-- Keep a short factual AI-use record in PLAN.md after approved stages, for the final README. Documentation updates for the completed stage are part of its scope.
+- Keep a short factual AI-use record in docs/PLAN.md after approved stages, for the final README. Documentation updates for the completed stage are part of its scope.
 
 ## Completion report format
 

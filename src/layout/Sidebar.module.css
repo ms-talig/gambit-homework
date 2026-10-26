@@ -19,6 +19,19 @@
   width: auto;
   height: 26px;
   color: var(--color-text);
+  /* Grow from the left edge so the logo stays aligned with the label. */
+  transform-origin: left center;
+  transition: transform var(--duration-normal) var(--easing-standard);
+}
+
+.logo:hover {
+  transform: scale(1.1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo {
+    transition: none;
+  }
 }
 
 .title {

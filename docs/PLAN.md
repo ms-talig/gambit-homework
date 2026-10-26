@@ -176,4 +176,8 @@ Stage 7, part 1: review fixes (Claude Code; read-only review reported first, fix
 - Checks (run by Claude): test:run passed (7 files, 29 tests; blank-name test now also checks the error clears); lint passed; build passed.
 - Open: favicon and per-route tab titles (optional polish, awaiting Tali's decision); README, fresh-clone check and final report pending.
 
+Documentation move (Claude Code; approved by Tali):
+- ARCHITECTURE.md, PLAN.md and visuals/ moved into docs/ with git mv; CLAUDE.md stays in the root because Claude Code loads it from there. Current path references updated in CLAUDE.md and ARCHITECTURE.md §11; earlier log entries left as written.
+- Checks: reference search only. No code or config changes, so test:run, lint and build were not run.
+
 For each approved stage append: scope approved, files changed, human decisions/review, checks/results, known limitations, approximate actual effort if measured. Do not invent times or outcomes.
