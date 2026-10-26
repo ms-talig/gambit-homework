@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes, useParams } from 'react-router'
 import { describe, expect, it } from 'vitest'
 import { APPLICATION_ID_PARAM, ROUTES } from '../../../src/app/routes.ts'
-import { UI_TEXT } from '../../../src/app/uiText.ts'
+import { UI_TEXT } from '../../../src/text/uiText.ts'
 import { resources } from '../../../src/data/resources.ts'
 import { ResourcesPage } from '../../../src/features/resources/ResourcesPage.tsx'
 import { ALL } from '../../../src/features/resources/resourceFilters.ts'
@@ -12,7 +12,7 @@ import type {
   Environment,
   Provider,
 } from '../../../src/types/models.ts'
-import { WORKSPACE_MESSAGES } from '../../../src/workspace/messages.ts'
+import { WORKSPACE_MESSAGES } from '../../../src/text/workspaceMessages.ts'
 import { useWorkspace } from '../../../src/workspace/useWorkspace.ts'
 import { WorkspaceProvider } from '../../../src/workspace/WorkspaceProvider.tsx'
 

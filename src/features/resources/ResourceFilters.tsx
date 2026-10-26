@@ -1,4 +1,4 @@
-import { UI_TEXT } from '../../app/uiText.ts'
+import { UI_TEXT } from '../../text/uiText.ts'
 import { SearchInput } from '../../components/ui/SearchInput.tsx'
 import { Select } from '../../components/ui/Select.tsx'
 import type { SelectOption } from '../../components/ui/Select.tsx'

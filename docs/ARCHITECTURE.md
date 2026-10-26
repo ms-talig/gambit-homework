@@ -205,10 +205,11 @@ src/
   layout/              AppLayout.tsx, Sidebar.tsx
   workspace/           WorkspaceProvider.tsx, WorkspaceContext.ts, useWorkspace.ts
   data/                resources.ts, getResources.ts
-  types/               models.ts
+  types/               models.ts, workspace.ts (workspace status, result and context value types)
   features/resources/  page, filters, domain table, toolbar, creation dialog
   features/applications/ page, list, details, graph
   components/ui/       shared primitives and generic Table
+  text/                uiText.ts (screen text), workspaceMessages.ts (workspace validation/error messages)
   styles/              globals.css, tokens.css
 tests/                 root-level; mirrors src/, no tests beside source files
   setup.ts             shared test setup

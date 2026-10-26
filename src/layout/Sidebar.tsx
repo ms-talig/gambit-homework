@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router'
 import { ROUTES } from '../app/routes.ts'
-import { UI_TEXT } from '../app/uiText.ts'
+import { UI_TEXT } from '../text/uiText.ts'
 import { DatabaseIcon, GridIcon } from '../components/ui/icons.tsx'
 import { GambitLogo } from './GambitLogo.tsx'
 import styles from './Sidebar.module.css'

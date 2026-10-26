@@ -1,8 +1,8 @@
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
+import { RESOURCES_STATUS } from '../../src/types/workspace.ts'
 import { useWorkspace } from '../../src/workspace/useWorkspace.ts'
-import { RESOURCES_STATUS } from '../../src/workspace/WorkspaceContext.ts'
 import { WorkspaceProvider } from '../../src/workspace/WorkspaceProvider.tsx'
 
 function WorkspaceProbe() {

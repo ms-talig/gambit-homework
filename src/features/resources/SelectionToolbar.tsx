@@ -1,4 +1,4 @@
-import { UI_TEXT } from '../../app/uiText.ts'
+import { UI_TEXT } from '../../text/uiText.ts'
 import { Button } from '../../components/ui/Button.tsx'
 import { BUTTON_VARIANT } from '../../components/ui/buttonVariants.ts'
 import styles from './SelectionToolbar.module.css'

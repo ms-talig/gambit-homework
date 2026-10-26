@@ -1,5 +1,5 @@
 import { useId } from 'react'
-import { UI_TEXT } from '../../app/uiText.ts'
+import { UI_TEXT } from '../../text/uiText.ts'
 import type { Application, Resource } from '../../types/models.ts'
 import { ApplicationGraph } from './ApplicationGraph.tsx'
 import styles from './ApplicationDetails.module.css'

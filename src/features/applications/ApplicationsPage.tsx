@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router'
 import { APPLICATION_ID_PARAM, ROUTES } from '../../app/routes.ts'
-import { UI_TEXT } from '../../app/uiText.ts'
+import { UI_TEXT } from '../../text/uiText.ts'
 import { PageHeader } from '../../components/ui/PageHeader.tsx'
 import { Panel } from '../../components/ui/Panel.tsx'
 import type { Resource } from '../../types/models.ts'

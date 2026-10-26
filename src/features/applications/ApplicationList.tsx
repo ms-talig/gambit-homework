@@ -1,6 +1,6 @@
 import { Link } from 'react-router'
 import { applicationPath } from '../../app/routes.ts'
-import { UI_TEXT } from '../../app/uiText.ts'
+import { UI_TEXT } from '../../text/uiText.ts'
 import { CubeIcon } from '../../components/ui/icons.tsx'
 import type { Application } from '../../types/models.ts'
 import styles from './ApplicationList.module.css'

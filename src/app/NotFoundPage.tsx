@@ -1,7 +1,7 @@
 import { Link } from 'react-router'
 import { PageHeader } from '../components/ui/PageHeader.tsx'
 import { ROUTES } from './routes.ts'
-import { UI_TEXT } from './uiText.ts'
+import { UI_TEXT } from '../text/uiText.ts'
 
 export function NotFoundPage() {
   return (

@@ -1,4 +1,4 @@
-import { UI_TEXT } from '../../app/uiText.ts'
+import { UI_TEXT } from '../../text/uiText.ts'
 import { Badge } from '../../components/ui/Badge.tsx'
 import { Checkbox } from '../../components/ui/Checkbox.tsx'
 import { Table } from '../../components/ui/Table.tsx'

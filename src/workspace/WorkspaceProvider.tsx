@@ -6,6 +6,11 @@ import type {
   CreateApplicationInput,
   Resource,
 } from '../types/models.ts'
+import { RESOURCES_STATUS } from '../types/workspace.ts'
+import type {
+  CreateApplicationResult,
+  WorkspaceValue,
+} from '../types/workspace.ts'
 import {
   formatApplicationId,
   getNextApplicationNumber,
@@ -16,12 +21,8 @@ import {
   saveApplications,
 } from './applicationStorage.ts'
 import { buildApplication } from './buildApplication.ts'
-import { WORKSPACE_MESSAGES } from './messages.ts'
-import { RESOURCES_STATUS, WorkspaceContext } from './WorkspaceContext.ts'
-import type {
-  CreateApplicationResult,
-  WorkspaceValue,
-} from './WorkspaceContext.ts'
+import { WORKSPACE_MESSAGES } from '../text/workspaceMessages.ts'
+import { WorkspaceContext } from './WorkspaceContext.ts'
 
 type ResourcesState =
   | { status: typeof RESOURCES_STATUS.loading }

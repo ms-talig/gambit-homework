@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { resources } from '../../src/data/resources.ts'
 import { buildApplication } from '../../src/workspace/buildApplication.ts'
-import { WORKSPACE_MESSAGES } from '../../src/workspace/messages.ts'
+import { WORKSPACE_MESSAGES } from '../../src/text/workspaceMessages.ts'
 
 describe('buildApplication', () => {
   it('builds an application with trimmed name and description', () => {

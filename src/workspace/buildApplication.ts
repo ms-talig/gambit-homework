@@ -1,6 +1,6 @@
 import type { CreateApplicationInput, Resource } from '../types/models.ts'
-import { WORKSPACE_MESSAGES } from './messages.ts'
-import type { CreateApplicationResult } from './WorkspaceContext.ts'
+import type { CreateApplicationResult } from '../types/workspace.ts'
+import { WORKSPACE_MESSAGES } from '../text/workspaceMessages.ts'
 
 // Validates creation input against the supplied resources and builds the
 // Application. Pure: the caller owns ID generation and state updates.

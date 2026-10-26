@@ -1,5 +1,5 @@
 import { useId } from 'react'
-import { UI_TEXT } from '../../app/uiText.ts'
+import { UI_TEXT } from '../../text/uiText.ts'
 import { VisuallyHidden } from '../../components/ui/VisuallyHidden.tsx'
 import type { Application, Resource } from '../../types/models.ts'
 import { computeGraphLayout, GRAPH_SIZES } from './graphLayout.ts'

@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router'
 import { describe, expect, it } from 'vitest'
 import { AppRoutes } from '../../../src/app/AppRoutes.tsx'
 import { applicationPath, ROUTES } from '../../../src/app/routes.ts'
-import { UI_TEXT } from '../../../src/app/uiText.ts'
+import { UI_TEXT } from '../../../src/text/uiText.ts'
 import { resources } from '../../../src/data/resources.ts'
 import { WorkspaceProvider } from '../../../src/workspace/WorkspaceProvider.tsx'
 

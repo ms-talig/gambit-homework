@@ -180,4 +180,12 @@ Documentation move (Claude Code; approved by Tali):
 - ARCHITECTURE.md, PLAN.md and visuals/ moved into docs/ with git mv; CLAUDE.md stays in the root because Claude Code loads it from there. Current path references updated in CLAUDE.md and ARCHITECTURE.md §11; earlier log entries left as written.
 - Checks: reference search only. No code or config changes, so test:run, lint and build were not run.
 
+Workspace types refactor (Claude Code; proposed by Tali, plan approved by Tali):
+- RESOURCES_STATUS, ResourcesStatus, CreateApplicationResult and WorkspaceValue moved from src/workspace/WorkspaceContext.ts to new src/types/workspace.ts; WorkspaceContext.ts now only creates the context. Imports updated in WorkspaceProvider, useWorkspace, buildApplication, ResourcesPage, CreateApplicationDialog and tests/workspace/WorkspaceProvider.test.tsx; ARCHITECTURE.md §9 file listing updated. No behavior change.
+- Checks (run by Claude): test:run passed (7 files, 29 tests); lint passed; build passed. No browser check (no visible change).
+
+Text constants move (Claude Code; approved by Tali):
+- src/app/uiText.ts → src/text/uiText.ts and src/workspace/messages.ts → src/text/workspaceMessages.ts (git mv). Reason: both hold user-facing text; the new neutral folder means features and the workspace no longer import text from the app shell. Kept as two files (screen text vs. validation/error messages). Imports updated in 13 source and 4 test files; ARCHITECTURE.md §9 tree updated. No behavior change.
+- Checks (run by Claude): test:run passed (7 files, 29 tests); lint passed; build passed.
+
 For each approved stage append: scope approved, files changed, human decisions/review, checks/results, known limitations, approximate actual effort if measured. Do not invent times or outcomes.

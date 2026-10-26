@@ -1,13 +1,13 @@
 import { useRef, useState } from 'react'
 import type { FormEvent } from 'react'
-import { UI_TEXT } from '../../app/uiText.ts'
+import { UI_TEXT } from '../../text/uiText.ts'
 import { Button } from '../../components/ui/Button.tsx'
 import { BUTTON_VARIANT } from '../../components/ui/buttonVariants.ts'
 import { Modal } from '../../components/ui/Modal.tsx'
 import { TextArea } from '../../components/ui/TextArea.tsx'
 import { TextField } from '../../components/ui/TextField.tsx'
-import { WORKSPACE_MESSAGES } from '../../workspace/messages.ts'
-import type { CreateApplicationResult } from '../../workspace/WorkspaceContext.ts'
+import type { CreateApplicationResult } from '../../types/workspace.ts'
+import { WORKSPACE_MESSAGES } from '../../text/workspaceMessages.ts'
 import styles from './CreateApplicationDialog.module.css'
 
 const TEXT = UI_TEXT.resources.createDialog
