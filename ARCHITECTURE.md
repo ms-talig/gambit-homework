@@ -8,7 +8,7 @@ Browse cloud resources, search/filter them, select several, create a named logic
 
 The assignment targets implementation, pragmatic scope, no backend, client-held state, and a fresh-clone run command. README must cover running, built scope, next steps, and AI use. Prioritize core behavior over abstractions or polish. Track effort honestly; report if the chosen scope threatens the timebox.
 
-Agreed: React + TypeScript + Vite, React Router declarative routing, CSS Modules, shared CSS design variables, local async resource loading, one WorkspaceProvider, client state with created Applications saved to sessionStorage, plain SVG graph, small local reusable UI library.
+Agreed: React + TypeScript + Vite, React Router 8 declarative routing, CSS Modules, shared CSS design variables, local async resource loading, one WorkspaceProvider, client state with created Applications saved to sessionStorage, plain SVG graph, small local reusable UI library.
 
 Not included: backend, JSON Server, persistence beyond the current browser tab, authentication, live cloud data, configurable columns, pagination, editing/deleting groups, graph dragging/zooming, external issue tracking. Sorting is deferred until core requirements work and needs a separate approved stage. E2E testing is out of scope. Automated tests use Vitest and React Testing Library (§10); their installation needs its own approved stage.
 
@@ -120,14 +120,17 @@ UI primitives know nothing about resources or Applications. Use native semantic 
 | Component   | Contract / responsibility                                                                                                                                                                                          |
 | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Button      | children, variant (primary/secondary), normal button props including disabled/type/onClick. Default type=button; submit explicitly.                                                                                |
-| TextField   | id, label, value, onChange, optional error/help, native input props. Associate labels and errors.                                                                                                                  |
+| Field       | Shared label, required/optional marker and linked error message for TextField and TextArea.                                                                                                                        |
+| TextField   | label, value, onChange, optional error, required, optionalText, ref, native input props. Generates its own id; error linked via aria-describedby; aria-required instead of native validation.                      |
 | TextArea    | Same field conventions, multiline control.                                                                                                                                                                         |
-| SearchInput | Composes TextField, type=search and search styling; reports text, never filters data itself.                                                                                                                       |
-| Select      | label, options [{value,label}], value, onChange; wraps native select. Used three times for filters.                                                                                                                |
-| Checkbox    | checked, accessible label, onChange and native checkbox props.                                                                                                                                                     |
-| Modal       | open, title, onClose, children. Owns dialog mechanics, focus containment, initial focus, Escape, focus restoration and backdrop behavior. Prefer native dialog semantics; propose exact implementation in stage 5. |
+| SearchInput | Standalone (not built on TextField): accessible label, type=search, search icon; reports text, never filters data itself.                                                                                          |
+| Select      | label, options [{value,label}], value, onChange; wraps native select and generates its own id. Used three times for filters.                                                                                       |
+| Checkbox    | checked, accessible label, onChange, optional indeterminate (used by the select-all header).                                                                                                                       |
+| Modal       | title, optional description, onClose, initialFocusRef, children. Native dialog opened with showModal while mounted (render conditionally). Escape closes; backdrop clicks do not; focus returns to the opener.       |
 | Panel       | children and className; consistent surface styling, no business state.                                                                                                                                             |
-| Table       | data, columns, getRowKey. Columns have stable id, header and cell renderer. Semantic table; no resource knowledge.                                                                                                 |
+| Table       | label, rows, columns, getRowKey, optional getRowClassName. Columns have stable id, header and cell renderer, optional row-header cell. Semantic table; no resource knowledge.                                       |
+| Badge       | Pill shape only; the caller supplies colors through className (criticality colors live in the feature).                                                                                                            |
+| VisuallyHidden | Content for screen readers only (checkbox column header, graph member list).                                                                                                                                    |
 
 
 Create primitives as they are needed, not a speculative design system. Do not recreate a custom dropdown keyboard interaction model when native select suffices. The instructor's modal/dropdown code needs accessibility improvements; do not copy it unchanged. Do not import the instructor's custom router.

@@ -225,6 +225,10 @@ describe('ResourcesPage', () => {
     )
     expect(descriptionInput).toHaveValue('Payment processing')
     expect(screen.getByRole('dialog', { name: DIALOG_TEXT.title })).toBe(dialog)
+
+    await user.type(nameInput, 'Payments API')
+    expect(nameInput).toBeValid()
+    expect(nameInput).not.toHaveAccessibleDescription()
   })
 
   it('creates one application from the selection and opens it', async () => {

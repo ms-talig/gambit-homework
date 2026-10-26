@@ -1,3 +1,6 @@
+const resourceNoun = (count: number) =>
+  count === 1 ? 'resource' : 'resources'
+
 export const UI_TEXT = {
   appTitle: 'Cloud resources',
   navigationLabel: 'Main navigation',
@@ -30,14 +33,14 @@ export const UI_TEXT = {
     selectedCount: (count: number) =>
       count === 0
         ? 'No resources selected'
-        : `${count} ${count === 1 ? 'resource' : 'resources'} selected`,
+        : `${count} ${resourceNoun(count)} selected`,
     hiddenSelectedCount: (count: number) => `${count} hidden by filters`,
     clearSelection: 'Clear selection',
     createApplication: 'Create Application',
     createDialog: {
       title: 'Create Application',
       subtitle: (count: number) =>
-        `Group ${count} selected ${count === 1 ? 'resource' : 'resources'}`,
+        `Group ${count} selected ${resourceNoun(count)}`,
       nameLabel: 'Application name',
       descriptionLabel: 'Description',
       optional: '(optional)',
@@ -50,10 +53,9 @@ export const UI_TEXT = {
     title: 'Applications',
     subtitle: 'View your applications and their resources',
     listLabel: 'Applications',
-    resourceCount: (count: number) =>
-      `${count} ${count === 1 ? 'resource' : 'resources'}`,
+    resourceCount: (count: number) => `${count} ${resourceNoun(count)}`,
     connectedCount: (count: number) =>
-      `${count} connected ${count === 1 ? 'resource' : 'resources'}`,
+      `${count} connected ${resourceNoun(count)}`,
     empty: {
       message:
         'No applications yet. Select resources and create an application to see it here.',
@@ -69,7 +71,7 @@ export const UI_TEXT = {
       applicationNodeLabel: 'Application',
       title: (name: string) => `${name} resource graph`,
       description: (name: string, count: number) =>
-        `${name} is connected to ${count} ${count === 1 ? 'resource' : 'resources'}.`,
+        `${name} is connected to ${count} ${resourceNoun(count)}.`,
       membersLabel: (name: string) => `${name} resources`,
       resourceDetails: (type: string, provider: string) =>
         `${type} · ${provider}`,

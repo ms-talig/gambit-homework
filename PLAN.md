@@ -168,4 +168,12 @@ Post-Stage 6 change: header select-all (Claude Code; requested by Tali, reversin
 - Files: Checkbox (optional indeterminate, set as a DOM property), ResourceTable (header checkbox, onToggleAllShown), ResourcesPage (toggleAllShown), uiText.ts (selectAllShown; unused column label removed), ARCHITECTURE.md §7; test in ResourcesPage.test.tsx.
 - Checks (run by Claude): test:run passed (7 files, 29 tests); lint passed; build passed. Browser check: assigned to Tali.
 
+Stage 7, part 1: review fixes (Claude Code; read-only review reported first, fixes 1–6 approved by Tali):
+- Long unbroken names/descriptions overflowed the Applications list (found by Tali): body overflow-wrap: break-word; list descriptions clamp to 2 lines.
+- Docs: CLAUDE.md router line corrected; ARCHITECTURE.md §1 and §6 component contracts updated to what was built (Field, Badge, VisuallyHidden added; SearchInput standalone; fields generate ids; Modal behavior; Checkbox indeterminate; Table props).
+- Dialog: name error clears as soon as the name is valid; name limited to 60 and description to 300 characters (UI limits).
+- uiText.ts: one resourceNoun helper replaces five copies of the singular/plural logic; unused --shadow-sm token removed.
+- Checks (run by Claude): test:run passed (7 files, 29 tests; blank-name test now also checks the error clears); lint passed; build passed.
+- Open: favicon and per-route tab titles (optional polish, awaiting Tali's decision); README, fresh-clone check and final report pending.
+
 For each approved stage append: scope approved, files changed, human decisions/review, checks/results, known limitations, approximate actual effort if measured. Do not invent times or outcomes.

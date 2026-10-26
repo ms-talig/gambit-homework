@@ -12,6 +12,8 @@ import styles from './CreateApplicationDialog.module.css'
 
 const TEXT = UI_TEXT.resources.createDialog
 const DESCRIPTION_ROWS = 4
+const NAME_MAX_LENGTH = 60
+const DESCRIPTION_MAX_LENGTH = 300
 
 export interface ApplicationDraft {
   name: string
@@ -34,6 +36,12 @@ export function CreateApplicationDialog({
   const [nameError, setNameError] = useState<string>()
   const [formError, setFormError] = useState<string>()
   const nameRef = useRef<HTMLInputElement>(null)
+
+  function handleNameChange(value: string) {
+    setName(value)
+    // Clear the error as soon as the name becomes valid.
+    if (nameError && value.trim()) setNameError(undefined)
+  }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -62,14 +70,16 @@ export function CreateApplicationDialog({
           ref={nameRef}
           label={TEXT.nameLabel}
           required
+          maxLength={NAME_MAX_LENGTH}
           value={name}
-          onChange={setName}
+          onChange={handleNameChange}
           error={nameError}
         />
         <TextArea
           label={TEXT.descriptionLabel}
           optionalText={TEXT.optional}
           rows={DESCRIPTION_ROWS}
+          maxLength={DESCRIPTION_MAX_LENGTH}
           value={description}
           onChange={setDescription}
         />
