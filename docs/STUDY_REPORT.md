@@ -41,7 +41,7 @@ They do different jobs:
 - loads the resources (`getResources()`) and tracks their status: `loading` / `ready` / `error`
 - loads Applications from `sessionStorage` on start (`loadApplications`) and saves them on every change (`saveApplications`)
 - removes saved Applications that point to resources that no longer exist (`pruneUnknownResources`)
-- provides `createApplication`, which validates the input, gives the new Application the next id, and adds it to state
+- provides `createApplication`, which validates the input, gives the new Application a random id, and adds it to state
 - packs all of that into one `value` object and passes it to the context
 
 **The third file, `useWorkspace.ts`**, is how components *read* the value. It calls `useContext(WorkspaceContext)` and throws a clear error if the value is `null`, which means someone forgot the provider. This also means components get a `WorkspaceValue` type and never have to handle `null` themselves.
@@ -78,9 +78,39 @@ They used to live in `WorkspaceContext.ts`. That meant files that never use the 
 
 - **`useMemo` for `value`:** without it, every render of the provider would create a new object, and every component using `useWorkspace` would re-render even when nothing changed. With it, consumers re-render only when `resourcesState`, `applications`, or `createApplication` change.
 - **`useCallback` for `createApplication`:** keeps the function the same between renders, so it doesn't break the `useMemo` above. It only changes when `resourcesState` changes, because it reads the resources.
-- **`useRef` for `nextApplicationNumber`:** the id counter must survive re-renders, but changing it shouldn't cause a re-render, and that's exactly what a ref is for. It starts from the highest id already saved (`getNextApplicationNumber`).
+- **`crypto.randomUUID()` for ids:** each new Application gets a random id, so it can't collide with ids restored from `sessionStorage` and no counter has to be kept or rebuilt. It needs a secure context (HTTPS or `localhost`), which is how the app is served.
 - **Lazy initial state `useState(loadApplications)`:** passing the function (not `loadApplications()`) means `sessionStorage` is read only once, on the first render.
 - **`ignore` flag in the loading effect:** if the component unmounts before `getResources()` finishes (including StrictMode's dev re-run), the cleanup sets `ignore = true`, so the late result is dropped instead of setting state.
 - **Discriminated union `ResourcesState`:** `resources` exists only when `status` is `ready`, and `message` exists only when it's `error`. TypeScript then won't allow reading resources while they are still loading.
 - **`NO_RESOURCES` constant:** a single shared empty array. A new `[]` on every render would be a new reference each time and would cause extra re-renders.
 - **`<WorkspaceContext value={...}>`:** React 19 lets you render the context itself as the provider. Older React needed `<WorkspaceContext.Provider value={...}>`.
+
+## src/workspace/buildApplication.ts
+
+### Q: What does it do, and where is it used?
+
+`buildApplication(input, resources, id)` validates a create request and builds the new Application. It never throws; it returns a `CreateApplicationResult`, which is either `{ ok: true, application }` or `{ ok: false, message }`. In order, it:
+
+1. Trims the name and rejects a blank one (`nameRequired`).
+2. Removes duplicate resource IDs with `new Set` and rejects an empty list (`selectionRequired`).
+3. Rejects IDs that don't match an existing resource (`unknownResources`).
+4. Trims the description and leaves the field out entirely when it's blank.
+
+It is called in one place, `createApplication` in `WorkspaceProvider.tsx`:
+
+```
+CreateApplicationDialog → ResourcesPage (adds selected IDs) → createApplication
+  1. resources not ready? → resourcesUnavailable
+  2. generate the id (crypto.randomUUID())
+  3. buildApplication(input, resources, id)
+  4. ok → append to applications state
+```
+
+Its tests are in `tests/workspace/buildApplication.test.ts`.
+
+### Q: Why is it a separate function?
+
+- **It's pure:** no React, no state, no randomness. The caller supplies the ID and owns the state update, so it can be tested without rendering anything.
+- **It's the integrity safety net.** The UI already blocks a blank name and an empty selection, but only this function catches duplicate or unknown IDs. Form validation gives fast feedback; the shared action protects the data.
+- The "resources loaded?" check stays in the provider because it depends on provider state.
+- The 60/300 character limits are enforced only in the dialog (UI limits), not here.

@@ -188,4 +188,9 @@ Text constants move (Claude Code; approved by Tali):
 - src/app/uiText.ts → src/text/uiText.ts and src/workspace/messages.ts → src/text/workspaceMessages.ts (git mv). Reason: both hold user-facing text; the new neutral folder means features and the workspace no longer import text from the app shell. Kept as two files (screen text vs. validation/error messages). Imports updated in 13 source and 4 test files; ARCHITECTURE.md §9 tree updated. No behavior change.
 - Checks (run by Claude): test:run passed (7 files, 29 tests); lint passed; build passed.
 
+Random application IDs (Claude Code; approved by Tali):
+- Replaced the app-N counter with crypto.randomUUID(). The counter needed recovery logic after sessionStorage restores (src/workspace/applicationIds.ts, a useRef); random IDs cannot collide with restored ones, so that file was deleted. The Stage 2 objection (secure context) does not apply to how the app is served: localhost for dev/preview, HTTPS for any deployment.
+- Files: WorkspaceProvider.tsx; applicationIds.ts deleted; ARCHITECTURE.md §3 (also documents that Applications left with no resources are removed); STUDY_REPORT.md. Existing remount test still checks restored applications and unique IDs.
+- Checks (run by Claude): test:run passed (7 files, 29 tests); lint passed; build passed. Browser check of creation and reload: assigned to Tali.
+
 For each approved stage append: scope approved, files changed, human decisions/review, checks/results, known limitations, approximate actual effort if measured. Do not invent times or outcomes.

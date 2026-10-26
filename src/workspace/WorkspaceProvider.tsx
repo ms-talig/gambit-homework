@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import { getResources } from '../data/getResources.ts'
 import type {
@@ -11,10 +11,6 @@ import type {
   CreateApplicationResult,
   WorkspaceValue,
 } from '../types/workspace.ts'
-import {
-  formatApplicationId,
-  getNextApplicationNumber,
-} from './applicationIds.ts'
 import {
   loadApplications,
   pruneUnknownResources,
@@ -41,7 +37,6 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
   })
   const [applications, setApplications] =
     useState<Application[]>(loadApplications)
-  const nextApplicationNumber = useRef(getNextApplicationNumber(applications));
 
   useEffect(() => {
     saveApplications(applications)
@@ -81,11 +76,11 @@ export function WorkspaceProvider({ children }: WorkspaceProviderProps) {
         return { ok: false, message: WORKSPACE_MESSAGES.resourcesUnavailable }
       }
 
-      const id = formatApplicationId(nextApplicationNumber.current)
+      // Random, so restored applications never collide with new ones.
+      const id = crypto.randomUUID()
       const result = buildApplication(input, resourcesState.resources, id)
 
       if (result.ok) {
-        nextApplicationNumber.current += 1
         setApplications((current) => [...current, result.application])
       }
 
