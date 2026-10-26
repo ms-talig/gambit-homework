@@ -201,30 +201,31 @@ Graph must accommodate 1 through all sample resources, not just the three in the
 
 ```text
 src/
-  app/                 App.tsx, AppRoutes.tsx
-  layout/              AppLayout.tsx, Sidebar.tsx
+  App.tsx              root composition (Router > WorkspaceProvider > AppRoutes)
+  routes/              AppRoutes.tsx, paths.ts (ROUTES, applicationPath), NotFoundPage/
   workspace/           WorkspaceProvider.tsx, WorkspaceContext.ts, useWorkspace.ts
   data/                resources.ts, getResources.ts
   types/               models.ts, workspace.ts (workspace status, result and context value types)
   features/resources/  page, filters, domain table, toolbar, creation dialog
   features/applications/ page, list, details, graph
-  components/ui/       shared primitives and generic Table
+  components/ui/       shared primitives and generic Table; icons.tsx
+  components/layout/   AppLayout/, Sidebar/, GambitLogo/ (app shell; may use routes and app text)
   text/                uiText.ts (screen text), workspaceMessages.ts (workspace validation/error messages)
   styles/              globals.css, tokens.css
 tests/                 root-level; mirrors src/, no tests beside source files
   setup.ts             shared test setup
   workspace/           e.g. WorkspaceProvider.test.tsx
-  features/resources/  e.g. ResourcesPage.test.tsx
-  features/applications/ e.g. ApplicationsPage.test.tsx
+  features/resources/  e.g. ResourcesPage/ResourcesPage.test.tsx
+  features/applications/ e.g. ApplicationsPage/ApplicationsPage.test.tsx
 ```
 
-Place component .module.css files beside components. Shared tokens cover colors, spacing, radii and typography. Match supplied mockups' light surfaces, blue accent, sidebar and spacing, not their literal demo groups or unsupported controls. Keep controls keyboard-accessible, focus visible, labels readable and layout usable on narrower screens. Do not add Tailwind or another UI system without approval.
+Each component has its own folder holding its .tsx, its .module.css and any helper used only by it (e.g. Button/buttonVariants.ts, ApplicationGraph/graphLayout.ts). Helpers shared within a folder stay at its root (icons.tsx, resourceFilters.ts). Shared tokens cover colors, spacing, radii and typography. Match supplied mockups' light surfaces, blue accent, sidebar and spacing, not their literal demo groups or unsupported controls. Keep controls keyboard-accessible, focus visible, labels readable and layout usable on narrower screens. Do not add Tailwind or another UI system without approval.
 
 ## 10. Testing
 
 Tools: Vitest, React Testing Library, @testing-library/user-event, jsdom. No E2E framework in current scope.
 
-Location: all tests live in a root-level tests/ directory that mirrors src/ (src/features/resources/ResourcesPage.tsx → tests/features/resources/ResourcesPage.test.tsx). Never place tests beside production files. Shared setup lives in tests/setup.ts. Test discovery, TypeScript and lint coverage for tests/ are configured in the test-infrastructure stage (PLAN.md Stage 0.6).
+Location: all tests live in a root-level tests/ directory that mirrors src/ (src/features/resources/ResourcesPage/ResourcesPage.tsx → tests/features/resources/ResourcesPage/ResourcesPage.test.tsx). Never place tests beside production files. Shared setup lives in tests/setup.ts. Test discovery, TypeScript and lint coverage for tests/ are configured in the test-infrastructure stage (PLAN.md Stage 0.6).
 
 Scope is proportionate to the 1–2 hour timebox. Priority behaviors:
 

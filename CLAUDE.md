@@ -31,7 +31,7 @@ TypeScript has separate app/node/test project configs (tsconfig.test.json covers
 ## Scope and verification
 
 - Client-side only. No backend or JSON Server. Created Applications persist in sessionStorage for the current browser tab (Tali's decision, 2026-10-25); no localStorage or IndexedDB.
-- Use CSS Modules and shared CSS variables. Reusable UI components live in src/components/ui.
+- Use CSS Modules and shared CSS variables. Reusable UI components live in src/components/ui and know nothing about the app's domain; the app shell (AppLayout, Sidebar, GambitLogo) lives in src/components/layout.
 - Use the course code as a reference, not a wholesale copy. Adapt to TypeScript and accessibility requirements.
 - Run relevant checks for the approved change, normally lint and build after implementation. Report passed, failed, and not checked separately.
 - Lint/build do not prove UI behavior. Use the browser acceptance checklist in docs/PLAN.md and state who performed each check.
@@ -61,8 +61,8 @@ TypeScript has separate app/node/test project configs (tsconfig.test.json covers
 - Do not place test files alongside production source files.
 - Keep shared test setup in `tests/setup.ts`.
 - Example:
-  `src/features/resources/ResourcesPage.tsx`
-  → `tests/features/resources/ResourcesPage.test.tsx`.
+  `src/features/resources/ResourcesPage/ResourcesPage.tsx`
+  → `tests/features/resources/ResourcesPage/ResourcesPage.test.tsx`.
 
 ### Incremental workflow
 

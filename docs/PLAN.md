@@ -193,4 +193,16 @@ Random application IDs (Claude Code; approved by Tali):
 - Files: WorkspaceProvider.tsx; applicationIds.ts deleted; ARCHITECTURE.md §3 (also documents that Applications left with no resources are removed); STUDY_REPORT.md. Existing remount test still checks restored applications and unique IDs.
 - Checks (run by Claude): test:run passed (7 files, 29 tests); lint passed; build passed. Browser check of creation and reload: assigned to Tali.
 
+Component folders (Claude Code; requested by Tali):
+- Every component in src/layout, src/components/ui and src/features now has its own folder with its .tsx and .module.css (git mv, 47 files). Single-consumer helpers moved in with their component (Button/buttonVariants.ts, ApplicationGraph/graphLayout.ts); shared helpers stay at the folder root (components/ui/icons.tsx, features/resources/resourceFilters.ts). Tests moved to mirror the new paths. Relative imports rewritten by a one-off script that resolved each import against the old layout. CLAUDE.md test-location example and ARCHITECTURE.md §9/§10 updated. No behavior change.
+- Checks (run by Claude): test:run passed (7 files, 29 tests); lint passed; build passed.
+
+Layout under components (Claude Code; requested by Tali):
+- src/layout moved to src/components/layout (git mv, 6 files); imports updated in AppRoutes.tsx and Sidebar.tsx. components/ui stays strictly generic; components/layout is the app shell and may use routes and app text. CLAUDE.md and ARCHITECTURE.md §9 updated. Features stay top-level in src/features.
+- Checks (run by Claude): test:run passed (7 files, 29 tests); lint passed; build passed.
+
+Routing folder (Claude Code; requested by Tali):
+- src/app split up: App.tsx moved to src/App.tsx (next to main.tsx); AppRoutes.tsx, routes.ts (renamed paths.ts; exports unchanged) and NotFoundPage (own folder) moved to src/routes/. tests/app/App.test.tsx moved to tests/App.test.tsx. Imports updated in 11 files; ARCHITECTURE.md §9 and STUDY_REPORT.md paths updated. No behavior change.
+- Checks (run by Claude): test:run passed (7 files, 29 tests); lint passed; build passed.
+
 For each approved stage append: scope approved, files changed, human decisions/review, checks/results, known limitations, approximate actual effort if measured. Do not invent times or outcomes.

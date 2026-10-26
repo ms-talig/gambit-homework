@@ -2,7 +2,7 @@
 
 Answers to questions about the code, file by file, for the homework review.
 
-## src/app/App.tsx
+## src/App.tsx
 
 `App` is the top-level component. It doesn't render any UI of its own. It only nests three layers:
 
@@ -16,7 +16,7 @@ Answers to questions about the code, file by file, for the homework review.
 
 1. **`BrowserRouter`** (from `react-router`) connects the app to the browser URL and history. Any component inside it can use routing (`Routes`, `Link`, `NavLink`, `useNavigate`, `useParams`). It goes on the outside so that everything below it can use routing.
 2. **`WorkspaceProvider`** (`src/workspace/WorkspaceProvider.tsx`) holds the state shared across the app: the resources list and the Applications saved in `sessionStorage`. It shares that state through React Context, and components read it with the `useWorkspace` hook.
-3. **`AppRoutes`** (`src/app/AppRoutes.tsx`) picks which page to render for the current URL.
+3. **`AppRoutes`** (`src/routes/AppRoutes.tsx`) picks which page to render for the current URL.
 
 **Why `WorkspaceProvider` sits above the routes:** the Resources page and the Applications page use the same data. Because the provider is outside `AppRoutes`, it stays mounted when the user moves between pages. Its state is not reset, and resources are not loaded again on every navigation.
 
