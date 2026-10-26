@@ -210,4 +210,17 @@ Stage 7, part 2: README (Claude Code; requested by Tali):
 - Sections added at Tali's request: UI component library, data loading and state management (why React Context, not Redux/Zustand), a note on sessionStorage as a no-backend tradeoff. Mock-data count removed from the text.
 - Checks (run by Claude): fresh git clone in a temp folder, npm install, test:run passed (29 tests), dev server served /resources (HTTP 200). Lint/build not rerun (documentation only). Visual browser check of the fresh copy not performed.
 
+E2E smoke test (Claude Code; approved by Tali):
+- Installed @playwright/test 1.64.1 (exact; dev dependency) and the Chromium headless browser (npx playwright install chromium, outside the project). 1.64.1 was the latest release, published 2026-10-14.
+- Files added: playwright.config.ts (Chromium only, tests/e2e/*.spec.ts, starts npm run dev on port 5173 or reuses a running server), tests/e2e/createApplication.spec.ts. Modified: package.json/package-lock.json ("test:e2e": "playwright test"), tsconfig.node.json (type-checks playwright.config.ts), eslint.config.js and .gitignore (Playwright output folders), README.md, CLAUDE.md, ARCHITECTURE.md §1/§10.
+- Test: / redirects to Resources; select two resources; create an Application; URL is its detail page; graph members match exactly; after a page reload the Application and its members are still shown (sessionStorage, which jsdom tests cannot reload). Selectors use roles and src/text constants.
+- Human decisions: Tali asked for a small E2E test to show E2E testing in the project; kept to one test, Chromium only, no CI.
+- Checks (run by Claude): test:e2e passed (1 test); test:run passed (7 files, 29 tests); lint passed; build passed (type-checks the spec and config), no test code in dist.
+- Limitations: dialog focus/Escape is still a manual browser check; not run in CI.
+
+Second E2E test (Claude Code; approved by Tali):
+- Added to tests/e2e/createApplication.spec.ts: select a resource, open the create dialog, the name field has focus; Escape closes the dialog, focus returns to Create Application and the row stays selected. Tab containment is not asserted: Chromium's native modal dialog lets Tab move to the browser UI. README, CLAUDE.md and ARCHITECTURE.md §1/§10 updated.
+- Checks (run by Claude): test:e2e passed (2 tests); lint passed; build passed. Negative check: with Modal's focus restore temporarily removed, the new test failed on the focus assertion; Modal.tsx was restored unchanged.
+- Limitations: Tab order, keyboard-only navigation and back/forward remain manual browser checks; not run in CI.
+
 For each approved stage append: scope approved, files changed, human decisions/review, checks/results, known limitations, approximate actual effort if measured. Do not invent times or outcomes.

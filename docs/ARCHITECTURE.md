@@ -10,7 +10,7 @@ The assignment targets implementation, pragmatic scope, no backend, client-held 
 
 Agreed: React + TypeScript + Vite, React Router 8 declarative routing, CSS Modules, shared CSS design variables, local async resource loading, one WorkspaceProvider, client state with created Applications saved to sessionStorage, plain SVG graph, small local reusable UI library.
 
-Not included: backend, JSON Server, persistence beyond the current browser tab, authentication, live cloud data, configurable columns, pagination, editing/deleting groups, graph dragging/zooming, external issue tracking. Sorting is deferred until core requirements work and needs a separate approved stage. E2E testing is out of scope. Automated tests use Vitest and React Testing Library (§10); their installation needs its own approved stage.
+Not included: backend, JSON Server, persistence beyond the current browser tab, authentication, live cloud data, configurable columns, pagination, editing/deleting groups, graph dragging/zooming, external issue tracking. Sorting is deferred until core requirements work and needs a separate approved stage. E2E testing is limited to two Playwright tests (§10). Automated tests use Vitest and React Testing Library (§10); their installation needs its own approved stage.
 
 ## 2. Data model
 
@@ -223,7 +223,7 @@ Each component has its own folder holding its .tsx, its .module.css and any help
 
 ## 10. Testing
 
-Tools: Vitest, React Testing Library, @testing-library/user-event, jsdom. No E2E framework in current scope.
+Tools: Vitest, React Testing Library, @testing-library/user-event, jsdom. E2E: Playwright, Chromium only, with two tests in tests/e2e/createApplication.spec.ts: create an Application, check its members, reload and check it persists in sessionStorage; and Escape closes the create dialog, focus returns to the opener and the selection is kept. Specs use the .spec.ts suffix so Vitest does not pick them up; run them with npm run test:e2e.
 
 Location: all tests live in a root-level tests/ directory that mirrors src/ (src/features/resources/ResourcesPage/ResourcesPage.tsx → tests/features/resources/ResourcesPage/ResourcesPage.test.tsx). Never place tests beside production files. Shared setup lives in tests/setup.ts. Test discovery, TypeScript and lint coverage for tests/ are configured in the test-infrastructure stage (PLAN.md Stage 0.6).
 
@@ -237,7 +237,7 @@ Scope is proportionate to the 1–2 hour timebox. Priority behaviors:
 
 Prefer integration tests that render real components with the providers they need, interact through user-event, and assert what the user sees using accessible queries (role, label, text). Add standalone unit tests only where meaningful logic warrants them. Do not test individual fixture attributes or trivial wrappers, and do not duplicate the same behavior across suites. Test observable behavior, not internal state.
 
-Limits: jsdom performs no layout and has limited native dialog/focus support. Visual checks, focus and modal behavior still need the browser checklist in PLAN.md; tests do not replace it.
+Limits: jsdom performs no layout and has limited native dialog/focus support. The E2E tests cover dialog Escape and focus return; visual checks, keyboard navigation and Tab order still need the browser checklist in PLAN.md.
 
 ## 11. References and interpretation
 

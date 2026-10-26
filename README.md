@@ -17,12 +17,15 @@ Then open the URL Vite prints (usually [http://localhost:5173](http://localhost:
 Other scripts:
 
 
-| Command            | What it does                     |
-| ------------------ | -------------------------------- |
-| `npm run test:run` | Run the test suite once (Vitest) |
-| `npm run lint`     | Lint with ESLint                 |
-| `npm run build`    | Type-check and build             |
-| `npm run preview`  | Serve the production build       |
+| Command            | What it does                                     |
+| ------------------ | ------------------------------------------------ |
+| `npm run test:run` | Run the test suite once (Vitest)                 |
+| `npm run test:e2e` | Run the end-to-end tests in Chromium (Playwright) |
+| `npm run lint`     | Lint with ESLint                                 |
+| `npm run build`    | Type-check and build                             |
+| `npm run preview`  | Serve the production build                       |
+
+The first time you run the end-to-end tests, install the browser with `npx playwright install chromium`.
 
 
 ## What I built
@@ -58,9 +61,27 @@ I built a small component library in `src/components/ui` so the screens are put 
 **Under the hood**
 
 - React 19, TypeScript, Vite, React Router, CSS Modules with shared CSS variables.
-- Integration tests with Vitest and React Testing Library cover search and filters, selection, creating an Application, and the Applications page, plus unit tests for validation, storage and graph layout.
+- Unit and integration tests with Vitest and React Testing Library, plus Playwright end-to-end tests (see [Tests](#tests)).
 
 More detail: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
+## Tests
+
+All tests live in `tests/`, which mirrors the `src/` folder structure. Vitest runs the unit and integration tests in jsdom, a simulated browser (`npm run test:run`). React Testing Library renders components and finds elements the way a user would, by role and label; user-event simulates clicks and typing; jest-dom adds DOM assertions such as `toBeInTheDocument`. Playwright runs the end-to-end tests in a real Chromium browser (`npm run test:e2e`).
+
+| Kind | File | Tools | What it covers |
+|---|---|---|---|
+| Unit | [buildApplication.test.ts](tests/workspace/buildApplication.test.ts) | Vitest | Trims the name and description, removes duplicate IDs, rejects unknown IDs, a blank name or an empty selection |
+| Unit | [applicationStorage.test.ts](tests/workspace/applicationStorage.test.ts) | Vitest, jsdom (its sessionStorage) | Ignores malformed data in sessionStorage; drops resource IDs that no longer exist |
+| Unit | [graphLayout.test.ts](tests/features/applications/ApplicationGraph/graphLayout.test.ts) | Vitest | No overlapping nodes and everything stays in bounds, for 1 up to all resources |
+| Integration | [WorkspaceProvider.test.tsx](tests/workspace/WorkspaceProvider.test.tsx) | Vitest, React Testing Library, user-event, jest-dom | Loads resources, creates an Application, restores saved Applications after a remount with unique IDs |
+| Integration | [ResourcesPage.test.tsx](tests/features/resources/ResourcesPage/ResourcesPage.test.tsx) | Vitest, React Testing Library, user-event, jest-dom | Search combined with filters, selection kept when filters hide rows, the header checkbox, a blank name rejected with the draft kept, a valid create that opens the new Application |
+| Integration | [ApplicationsPage.test.tsx](tests/features/applications/ApplicationsPage/ApplicationsPage.test.tsx) | Vitest, React Testing Library, user-event, jest-dom | An Application shows exactly its member resources, a missing Application URL, Applications kept when navigating with the sidebar |
+| Smoke | [App.test.tsx](tests/App.test.tsx) | Vitest, React Testing Library, jest-dom | The root URL redirects to Resources |
+| End-to-end | [createApplication.spec.ts](tests/e2e/createApplication.spec.ts) | Playwright (Chromium) | Creates an Application, checks its graph, then reloads the page and checks it is still there (sessionStorage) |
+| End-to-end | [createApplication.spec.ts](tests/e2e/createApplication.spec.ts) | Playwright (Chromium) | Escape closes the create dialog, focus returns to the Create Application button and the selection is kept |
+
+The end-to-end tests cover what jsdom can't: a real page reload, and native dialog focus and Escape.
 
 ## Data loading and state management
 
@@ -100,7 +121,7 @@ To keep it safe, stored data is treated as untrusted. Malformed entries are skip
 - Table sorting.
 - Icons for each resource type in the graph, and zoom/pan for large groups (big graphs currently scroll sideways in narrow windows).
 - A real API and persistence beyond the browser tab.
-- End-to-end tests (e.g. Playwright) for things jsdom can't check, such as dialog focus and Escape.
+- More end-to-end tests, such as keyboard-only navigation and back/forward.
 - Replace the default Vite favicon.
 
 ## Where I used AI

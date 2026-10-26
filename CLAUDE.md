@@ -17,7 +17,7 @@ Read docs/ARCHITECTURE.md and docs/PLAN.md before proposing work. These describe
 
 ## Current stack baseline
 
-Checked package.json on 2026-10-25: React/React DOM 19, TypeScript ~6.0, Vite 8 with @vitejs/plugin-react, ESLint 10 flat config. Testing (Stage 0.6): Vitest 5, React Testing Library 16 with @testing-library/dom, user-event, jest-dom, jsdom; config lives in vite.config.ts. Recheck actual files before work; do not upgrade this baseline automatically.
+Checked package.json on 2026-10-25: React/React DOM 19, TypeScript ~6.0, Vite 8 with @vitejs/plugin-react, ESLint 10 flat config. Testing (Stage 0.6): Vitest 5, React Testing Library 16 with @testing-library/dom, user-event, jest-dom, jsdom; config lives in vite.config.ts. E2E: Playwright (@playwright/test 1.64.1, Chromium only); config in playwright.config.ts. Recheck actual files before work; do not upgrade this baseline automatically.
 
 TypeScript has separate app/node/test project configs (tsconfig.test.json covers tests/). Follow their restrictions, including type-only imports where required. Routing uses React Router 8 (declarative mode, package react-router). No state library or formatter is declared.
 
@@ -27,6 +27,7 @@ TypeScript has separate app/node/test project configs (tsconfig.test.json covers
 - npm run preview — production preview
 - npm test — Vitest in watch mode
 - npm run test:run — single Vitest run; use for completion checks
+- npm run test:e2e — Playwright E2E tests (starts the dev server itself)
 
 ## Scope and verification
 
@@ -52,7 +53,8 @@ TypeScript has separate app/node/test project configs (tsconfig.test.json covers
 - Use Vitest, React Testing Library, user-event, and jsdom.
 - Focus on integration tests for user behavior. Add unit tests
   for standalone logic where useful.
-- E2E testing is outside the current scope.
+- E2E: two Playwright tests (main flow with reload; dialog Escape/focus) in tests/e2e/
+  (*.spec.ts, not picked up by Vitest). Add more only with approval.
 
 ### Test location
 
