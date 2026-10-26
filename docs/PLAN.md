@@ -205,4 +205,9 @@ Routing folder (Claude Code; requested by Tali):
 - src/app split up: App.tsx moved to src/App.tsx (next to main.tsx); AppRoutes.tsx, routes.ts (renamed paths.ts; exports unchanged) and NotFoundPage (own folder) moved to src/routes/. tests/app/App.test.tsx moved to tests/App.test.tsx. Imports updated in 11 files; ARCHITECTURE.md §9 and STUDY_REPORT.md paths updated. No behavior change.
 - Checks (run by Claude): test:run passed (7 files, 29 tests); lint passed; build passed.
 
+Stage 7, part 2: README (Claude Code; requested by Tali):
+- README.md rewritten from the Vite template to the four sections the brief asks for: how to run, what was built, next steps, AI use. Content taken from ARCHITECTURE.md and this log; no new claims.
+- Sections added at Tali's request: UI component library, data loading and state management (why React Context, not Redux/Zustand), a note on sessionStorage as a no-backend tradeoff. Mock-data count removed from the text.
+- Checks (run by Claude): fresh git clone in a temp folder, npm install, test:run passed (29 tests), dev server served /resources (HTTP 200). Lint/build not rerun (documentation only). Visual browser check of the fresh copy not performed.
+
 For each approved stage append: scope approved, files changed, human decisions/review, checks/results, known limitations, approximate actual effort if measured. Do not invent times or outcomes.
