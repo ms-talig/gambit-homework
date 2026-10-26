@@ -2,6 +2,7 @@ import { NavLink } from 'react-router'
 import { ROUTES } from '../app/routes.ts'
 import { UI_TEXT } from '../app/uiText.ts'
 import { DatabaseIcon, GridIcon } from '../components/ui/icons.tsx'
+import { GambitLogo } from './GambitLogo.tsx'
 import styles from './Sidebar.module.css'
 
 const NAV_ITEMS = [
@@ -20,7 +21,10 @@ const NAV_ITEMS = [
 export function Sidebar() {
   return (
     <aside className={styles.sidebar}>
-      <p className={styles.title}>{UI_TEXT.appTitle}</p>
+      <div className={styles.brand}>
+        <GambitLogo className={styles.logo} label={UI_TEXT.brandName} />
+        <p className={styles.title}>{UI_TEXT.appTitle}</p>
+      </div>
       <nav aria-label={UI_TEXT.navigationLabel}>
         <ul className={styles.list}>
           {NAV_ITEMS.map(({ to, label, Icon }) => (

@@ -2,6 +2,7 @@ const resourceNoun = (count: number) =>
   count === 1 ? 'resource' : 'resources'
 
 export const UI_TEXT = {
+  brandName: 'Gambit',
   appTitle: 'Cloud resources',
   navigationLabel: 'Main navigation',
   resources: {

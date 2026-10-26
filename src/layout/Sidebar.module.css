@@ -4,11 +4,29 @@
   border-right: 1px solid var(--color-border);
 }
 
-.title {
-  margin-bottom: var(--space-5);
+.brand {
+  display: flex;
+  flex-direction: column;
+  /* Not stretched: a stretched SVG would center the logo in the extra width. */
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
   padding: 0 var(--space-3);
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold);
+}
+
+.logo {
+  display: block;
+  width: auto;
+  height: 26px;
+  color: var(--color-text);
+}
+
+.title {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
 .list {
@@ -57,9 +75,16 @@
     border-bottom: 1px solid var(--color-border);
   }
 
-  .title {
+  .brand {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-3);
     margin: 0;
     padding: 0;
+  }
+
+  .logo {
+    height: 22px;
   }
 
   .list {
